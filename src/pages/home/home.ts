@@ -12,6 +12,8 @@ import firebase from 'firebase';
   templateUrl: 'home.html',
 })
 export class HomePage {
+
+  //Fahri test comment
   userId: any;
   db = firebase.firestore();
   public map: any;
