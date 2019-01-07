@@ -38,7 +38,7 @@ export class StartPage {
     extra_info: null,
     timestamp:  null,
     docId: null,
-    time_chosen: null,
+    time_chosen: 1515283200,
     time_half: null,
     intervall: null,
   };
@@ -245,7 +245,7 @@ markerLoad(placeId){
 
 
 
-  createListMarkers(){
+  /*createListMarkers(){
    
     this.afAuth.authState.subscribe(user =>{
       if(user) this.userId =  user.uid
@@ -319,7 +319,7 @@ markerLoad(placeId){
         });
  
   
-  }
+  }*/
  
 
   loadMap() {
@@ -446,7 +446,7 @@ markerLoad(placeId){
       this.map = new google.maps.Map(this.mapElement.nativeElement,mapOptions);
       this.map.mapTypes.set('styled_map', styledMapType);
       this.map.setMapTypeId('styled_map');
-      this.createListMarkers();
+     // this.createListMarkers();
 
 
     }, (err) => {
