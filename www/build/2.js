@@ -1,12 +1,12 @@
 webpackJsonp([2],{
 
-/***/ 1186:
+/***/ 1187:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomePageModule", function() { return HomePageModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__home__ = __webpack_require__(1197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__home__ = __webpack_require__(1198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_super_tabs__ = __webpack_require__(564);
@@ -41,7 +41,7 @@ var HomePageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 1192:
+/***/ 1193:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52,11 +52,11 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 __webpack_require__(559);
 var firebase = _interopDefault(__webpack_require__(164));
 __webpack_require__(560);
-__webpack_require__(1193);
-__webpack_require__(561);
 __webpack_require__(1194);
+__webpack_require__(561);
 __webpack_require__(1195);
 __webpack_require__(1196);
+__webpack_require__(1197);
 
 /**
  * Copyright 2017 Google Inc.
@@ -176,7 +176,7 @@ module.exports = firebase;
 
 /***/ }),
 
-/***/ 1193:
+/***/ 1194:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15537,7 +15537,7 @@ exports.OnDisconnect = OnDisconnect;
 
 /***/ }),
 
-/***/ 1194:
+/***/ 1195:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16095,7 +16095,7 @@ exports.registerFunctions = registerFunctions;
 
 /***/ }),
 
-/***/ 1195:
+/***/ 1196:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18229,7 +18229,7 @@ function isSWControllerSupported() {
 
 /***/ }),
 
-/***/ 1196:
+/***/ 1197:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21694,7 +21694,7 @@ registerStorage(__WEBPACK_IMPORTED_MODULE_0__firebase_app___default.a);
 
 /***/ }),
 
-/***/ 1197:
+/***/ 1198:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21704,7 +21704,7 @@ registerStorage(__WEBPACK_IMPORTED_MODULE_0__firebase_app___default.a);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_geolocation__ = __webpack_require__(563);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic2_super_tabs__ = __webpack_require__(564);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase__ = __webpack_require__(1192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase__ = __webpack_require__(1193);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_firebase__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -21777,7 +21777,7 @@ var HomePage = /** @class */ (function () {
     ], HomePage.prototype, "superTabs", void 0);
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/alexandersteurer/Routeplanner/src/pages/home/home.html"*/'<ion-header no-border>\n  <ion-navbar color="primary">\n    <ion-buttons left>\n      <button ion-button icon-only (click)="logout()">\n        <ion-icon name="log-out"></ion-icon>\n      </button>\n    </ion-buttons>\n\n      <ion-title>{{ pages[selectedTab].title }}</ion-title>\n \n  </ion-navbar>\n \n\n</ion-header>\n\n<ion-content no-border>\n    <super-tabs selectedTabIndex="1" [config]="{dragThreshold: \'300\'}" [config]="{transitionDuration: \'300\'}" [config]="{allowElementScroll: true}"  tabsPlacement="bottom" toolbarBackground="primary" toolbarColor="light" indicatorColor="light"\n    (tabSelect)="onTabSelect($event)">\n    <super-tab *ngFor="let page of pages" [root]="page.pageName" [icon]="page.icon" [id]="page.id"></super-tab>\n  </super-tabs>\n\n  \n\n\n</ion-content>\n\n\n\n'/*ion-inline-end:"/Users/alexandersteurer/Routeplanner/src/pages/home/home.html"*/,
+            selector: 'page-home',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/home/home.html"*/'<ion-header no-border>\n  <ion-navbar color="primary">\n    <ion-buttons left>\n      <button ion-button icon-only (click)="logout()">\n        <ion-icon name="log-out"></ion-icon>\n      </button>\n    </ion-buttons>\n\n      <ion-title>{{ pages[selectedTab].title }}</ion-title>\n \n  </ion-navbar>\n \n\n</ion-header>\n\n<ion-content no-border>\n    <super-tabs selectedTabIndex="1" [config]="{dragThreshold: \'300\'}" [config]="{transitionDuration: \'300\'}" [config]="{allowElementScroll: true}"  tabsPlacement="bottom" toolbarBackground="primary" toolbarColor="light" indicatorColor="light"\n    (tabSelect)="onTabSelect($event)">\n    <super-tab *ngFor="let page of pages" [root]="page.pageName" [icon]="page.icon" [id]="page.id"></super-tab>\n  </super-tabs>\n\n  \n\n\n</ion-content>\n\n\n\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/home/home.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* NavController */], __WEBPACK_IMPORTED_MODULE_0_angularfire2_auth__["a" /* AngularFireAuth */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_geolocation__["a" /* Geolocation */],
             __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["p" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* AlertController */]])

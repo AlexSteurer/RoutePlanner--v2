@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 1189:
+/***/ 1190:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RoutingPageModule", function() { return RoutingPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routing__ = __webpack_require__(1199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routing__ = __webpack_require__(1200);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -38,7 +38,7 @@ var RoutingPageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 1192:
+/***/ 1193:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49,11 +49,11 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 __webpack_require__(559);
 var firebase = _interopDefault(__webpack_require__(164));
 __webpack_require__(560);
-__webpack_require__(1193);
-__webpack_require__(561);
 __webpack_require__(1194);
+__webpack_require__(561);
 __webpack_require__(1195);
 __webpack_require__(1196);
+__webpack_require__(1197);
 
 /**
  * Copyright 2017 Google Inc.
@@ -173,7 +173,7 @@ module.exports = firebase;
 
 /***/ }),
 
-/***/ 1193:
+/***/ 1194:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15534,7 +15534,7 @@ exports.OnDisconnect = OnDisconnect;
 
 /***/ }),
 
-/***/ 1194:
+/***/ 1195:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16092,7 +16092,7 @@ exports.registerFunctions = registerFunctions;
 
 /***/ }),
 
-/***/ 1195:
+/***/ 1196:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18226,7 +18226,7 @@ function isSWControllerSupported() {
 
 /***/ }),
 
-/***/ 1196:
+/***/ 1197:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21691,7 +21691,7 @@ registerStorage(__WEBPACK_IMPORTED_MODULE_0__firebase_app___default.a);
 
 /***/ }),
 
-/***/ 1199:
+/***/ 1200:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21701,9 +21701,9 @@ registerStorage(__WEBPACK_IMPORTED_MODULE_0__firebase_app___default.a);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_clients_clients__ = __webpack_require__(254);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase__ = __webpack_require__(1192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase__ = __webpack_require__(1193);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_firebase__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__ = __webpack_require__(1200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__ = __webpack_require__(1201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -21800,7 +21800,7 @@ var RoutingPage = /** @class */ (function () {
     };
     RoutingPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["m" /* Component */])({
-            selector: 'page-routing',template:/*ion-inline-start:"/Users/alexandersteurer/Routeplanner/src/pages/routing/routing.html"*/'<!--\n  Generated template for the RoutingPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n      <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content >\n  <ion-list>\n      <ion-card >\n    <ion-item-sliding *ngFor="let client of clientList | async">\n      \n        <ion-item  tappable>\n        <h2>{{client.title}}</h2>\n        \n          </ion-item>\n          \n          <ion-item-options side="right">\n              <button ion-button color="secondary" (click)="edit(client.id)">\n                  <ion-icon name="build"></ion-icon>\n                </button>\n              <button ion-button color="danger" (click)="delete(client)">\n                  <ion-icon name="trash"></ion-icon>\n                </button>\n            \n           \n          </ion-item-options>\n\n\n    </ion-item-sliding>\n  </ion-card>\n    \n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/alexandersteurer/Routeplanner/src/pages/routing/routing.html"*/,
+            selector: 'page-routing',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/routing/routing.html"*/'<!--\n  Generated template for the RoutingPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n      <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content >\n  <ion-list>\n      <ion-card >\n    <ion-item-sliding *ngFor="let client of clientList | async">\n      \n        <ion-item  tappable>\n        <h2>{{client.title}}</h2>\n        \n          </ion-item>\n          \n          <ion-item-options side="right">\n              <button ion-button color="secondary" (click)="edit(client.id)">\n                  <ion-icon name="build"></ion-icon>\n                </button>\n              <button ion-button color="danger" (click)="delete(client)">\n                  <ion-icon name="trash"></ion-icon>\n                </button>\n            \n           \n          </ion-item-options>\n\n\n    </ion-item-sliding>\n  </ion-card>\n    \n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/routing/routing.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4_ionic_angular__["n" /* NavController */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["p" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__providers_clients_clients__["a" /* ClientsProvider */], __WEBPACK_IMPORTED_MODULE_1_angularfire2_auth__["a" /* AngularFireAuth */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["f" /* Events */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["m" /* ModalController */]])
     ], RoutingPage);
@@ -21811,31 +21811,31 @@ var RoutingPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 1200:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(1201);
-//# sourceMappingURL=filter.js.map
-
-/***/ }),
-
 /***/ 1201:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var rxjs_1 = __webpack_require__(28);
-var filter_1 = __webpack_require__(1202);
-rxjs_1.Observable.prototype.filter = filter_1.filter;
+__webpack_require__(1202);
 //# sourceMappingURL=filter.js.map
 
 /***/ }),
 
 /***/ 1202:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var rxjs_1 = __webpack_require__(28);
+var filter_1 = __webpack_require__(1203);
+rxjs_1.Observable.prototype.filter = filter_1.filter;
+//# sourceMappingURL=filter.js.map
+
+/***/ }),
+
+/***/ 1203:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

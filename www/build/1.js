@@ -1,6 +1,6 @@
 webpackJsonp([1],{
 
-/***/ 1190:
+/***/ 1191:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StartPageModule", function() { return StartPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start__ = __webpack_require__(1203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start__ = __webpack_require__(1204);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -38,7 +38,7 @@ var StartPageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 1192:
+/***/ 1193:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49,11 +49,11 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 __webpack_require__(559);
 var firebase = _interopDefault(__webpack_require__(164));
 __webpack_require__(560);
-__webpack_require__(1193);
-__webpack_require__(561);
 __webpack_require__(1194);
+__webpack_require__(561);
 __webpack_require__(1195);
 __webpack_require__(1196);
+__webpack_require__(1197);
 
 /**
  * Copyright 2017 Google Inc.
@@ -173,7 +173,7 @@ module.exports = firebase;
 
 /***/ }),
 
-/***/ 1193:
+/***/ 1194:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15534,7 +15534,7 @@ exports.OnDisconnect = OnDisconnect;
 
 /***/ }),
 
-/***/ 1194:
+/***/ 1195:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16092,7 +16092,7 @@ exports.registerFunctions = registerFunctions;
 
 /***/ }),
 
-/***/ 1195:
+/***/ 1196:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18226,7 +18226,7 @@ function isSWControllerSupported() {
 
 /***/ }),
 
-/***/ 1196:
+/***/ 1197:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21691,7 +21691,7 @@ registerStorage(__WEBPACK_IMPORTED_MODULE_0__firebase_app___default.a);
 
 /***/ }),
 
-/***/ 1203:
+/***/ 1204:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21702,7 +21702,7 @@ registerStorage(__WEBPACK_IMPORTED_MODULE_0__firebase_app___default.a);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__ = __webpack_require__(563);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_firebase__ = __webpack_require__(1192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_firebase__ = __webpack_require__(1193);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_firebase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_firebase__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_moment__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_moment__);
@@ -21745,7 +21745,7 @@ var StartPage = /** @class */ (function () {
             extra_info: null,
             timestamp: null,
             docId: null,
-            time_chosen: null,
+            time_chosen: 1515283200,
             time_half: null,
             intervall: null,
         };
@@ -21882,58 +21882,81 @@ var StartPage = /** @class */ (function () {
         });
         this.pushButton();
     };
-    StartPage.prototype.createListMarkers = function () {
-        var _this = this;
-        this.afAuth.authState.subscribe(function (user) {
-            if (user)
-                _this.userId = user.uid;
-            _this.db.collection(user.uid).get().then(function (docs) {
-                docs.forEach(function (coord) {
-                    var title = coord.data().title;
-                    var adress = coord.data().adress;
-                    var placeId = coord.data().placeId;
-                    var time_one = coord.data().time_chosen.seconds; // Unix seconds notwendig ??? - macht nur fehler
-                    var time_half = coord.data().time_half.seconds;
-                    console.log(__WEBPACK_IMPORTED_MODULE_7_moment___default()());
-                    console.log(__WEBPACK_IMPORTED_MODULE_7_moment___default.a.unix(time_one));
-                    console.log(__WEBPACK_IMPORTED_MODULE_7_moment___default.a.unix(time_half));
-                    var time_stamp = coord.data().timestamp;
-                    var extrainfo = '';
-                    var marker_color = '';
-                    if (__WEBPACK_IMPORTED_MODULE_7_moment___default()().isAfter(__WEBPACK_IMPORTED_MODULE_7_moment___default.a.unix(time_one))) {
-                        marker_color = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
-                    }
-                    if (__WEBPACK_IMPORTED_MODULE_7_moment___default()().isAfter(__WEBPACK_IMPORTED_MODULE_7_moment___default.a.unix(time_half))) {
-                        marker_color = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
-                    }
-                    if (__WEBPACK_IMPORTED_MODULE_7_moment___default()().isBefore(__WEBPACK_IMPORTED_MODULE_7_moment___default.a.unix(time_half))) {
-                        marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-                    }
-                    var position = new google.maps.LatLng(coord.data().location._lat, coord.data().location._long);
-                    var marker = new google.maps.Marker({
-                        position: position,
-                        map: _this.map,
-                        icon: marker_color,
-                        title: title,
-                        animation: google.maps.Animation.DROP,
-                    });
-                    var infowindow = new google.maps.InfoWindow({
-                        content: '<div><strong>' + title + '</strong><br>' +
-                            'Adress: ' + adress + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
-                        maxWidth: 300
-                    });
-                    google.maps.event.addListenerOnce(infowindow, 'domready', function () {
-                        document.getElementById('myid').addEventListener('click', function () {
-                            _this.markerLoad(placeId);
-                        });
-                    });
-                    google.maps.event.addListener(marker, 'click', function () {
-                        infowindow.open(this.map, this);
-                    });
-                });
-            });
-        });
-    };
+    /*createListMarkers(){
+     
+      this.afAuth.authState.subscribe(user =>{
+        if(user) this.userId =  user.uid
+      
+            
+            this.db.collection(user.uid).get().then(docs => {
+              docs.forEach((coord) => {
+              const title = coord.data().title;
+              const adress = coord.data().adress;
+              const placeId = coord.data().placeId;
+              const time_one = coord.data().time_chosen.seconds; // Unix seconds notwendig ??? - macht nur fehler
+              const time_half = coord.data().time_half.seconds;
+              console.log(moment());
+              console.log(moment.unix(time_one));
+              console.log(moment.unix(time_half))
+  
+              const time_stamp = coord.data().timestamp;
+              const extrainfo = '';
+              var marker_color = '';
+              
+              if (moment().isAfter(moment.unix(time_one))){
+                marker_color = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+                
+  
+              }
+               if(moment().isAfter(moment.unix(time_half))){
+                 marker_color =  'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+                
+              }
+               if(moment().isBefore(moment.unix(time_half))){
+                marker_color =  'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+               
+             }
+              const position = new google.maps.LatLng(coord.data().location._lat,coord.data().location._long);
+              const marker = new google.maps.Marker({
+                  position,
+                  map: this.map,
+                  icon: marker_color,
+                  title: title,
+                  animation: google.maps.Animation.DROP,
+                 });
+             
+                 
+                 
+                 var infowindow = new google.maps.InfoWindow({
+                  content : '<div><strong>' + title + '</strong><br>' +
+                  'Adress: ' + adress + '<br>' + '</div>'+'<button id="myid"><strong>Show Client Info !</strong></button>',
+                  maxWidth: 300
+                  });
+                  google.maps.event.addListenerOnce(infowindow, 'domready', () => {
+                  document.getElementById('myid').addEventListener('click', () => {
+                    this.markerLoad(placeId);
+                   
+                  
+                  });
+                  
+                  });
+  
+                 google.maps.event.addListener(marker,'click',function(){
+                  
+                  infowindow.open(this.map, this);
+                 })
+   
+             
+                })
+              })
+              
+  
+  
+              
+          });
+   
+    
+    }*/
     StartPage.prototype.loadMap = function () {
         var _this = this;
         this.geolocation.getCurrentPosition().then(function (position) {
@@ -22048,7 +22071,7 @@ var StartPage = /** @class */ (function () {
             _this.map = new google.maps.Map(_this.mapElement.nativeElement, mapOptions);
             _this.map.mapTypes.set('styled_map', styledMapType);
             _this.map.setMapTypeId('styled_map');
-            _this.createListMarkers();
+            // this.createListMarkers();
         }, function (err) {
             console.log(err);
         });
@@ -22065,7 +22088,7 @@ var StartPage = /** @class */ (function () {
     ], StartPage.prototype, "mapElement", void 0);
     StartPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["m" /* Component */])({
-            selector: 'start-home',template:/*ion-inline-start:"/Users/alexandersteurer/Routeplanner/src/pages/start/start.html"*/'<!--\n  Generated template for the StartPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header no-border>\n  \n    \n           \n        <ion-searchbar no-border [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>\n      \n      \n   \n    <ion-list  [hidden]="autocompleteItems.length == 0" >\n      <ion-item  text-wrap *ngFor="let item of autocompleteItems" >\n          \n           <button ion-button color="green" (tap)="selectSearchResult(item)">\n          <ion-icon name="add"> Add Client</ion-icon> \n        </button> \n        <p  #searchlist>  {{ item.description }} </p>\n     \n       \n        <!-- <ion-item-options side="right">\n            <button ion-button color="danger" >\n              <ion-icon name="trash"></ion-icon>\n            </button>\n          </ion-item-options> -->\n     \n      </ion-item>\n    </ion-list>\n  \n  \n</ion-header>\n  \n\n\n\n<ion-content >\n    <div #map id= "map"  ></div>\n    \n</ion-content>\n'/*ion-inline-end:"/Users/alexandersteurer/Routeplanner/src/pages/start/start.html"*/,
+            selector: 'start-home',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/start/start.html"*/'<!--\n  Generated template for the StartPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header no-border>\n  \n    \n           \n        <ion-searchbar no-border [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>\n      \n      \n   \n    <ion-list  [hidden]="autocompleteItems.length == 0" >\n      <ion-item  text-wrap *ngFor="let item of autocompleteItems" >\n          \n           <button ion-button color="green" (tap)="selectSearchResult(item)">\n          <ion-icon name="add"> Add Client</ion-icon> \n        </button> \n        <p  #searchlist>  {{ item.description }} </p>\n     \n       \n        <!-- <ion-item-options side="right">\n            <button ion-button color="danger" >\n              <ion-icon name="trash"></ion-icon>\n            </button>\n          </ion-item-options> -->\n     \n      </ion-item>\n    </ion-list>\n  \n  \n</ion-header>\n  \n\n\n\n<ion-content >\n    <div #map id= "map"  ></div>\n    \n</ion-content>\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/start/start.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4_ionic_angular__["n" /* NavController */], __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */],
             __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["p" /* NavParams */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["a" /* AlertController */],

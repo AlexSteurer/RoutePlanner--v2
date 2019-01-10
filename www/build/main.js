@@ -45,7 +45,7 @@ var MyApp = /** @class */ (function () {
         });
     }
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/Users/alexandersteurer/Routeplanner/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/alexandersteurer/Routeplanner/src/app/app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/app/app.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__["a" /* AngularFireAuth */]])
     ], MyApp);
@@ -53,6 +53,23 @@ var MyApp = /** @class */ (function () {
 }());
 
 //# sourceMappingURL=app.component.js.map
+
+/***/ }),
+
+/***/ 1186:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FIREBASE_CONFIG; });
+var FIREBASE_CONFIG = {
+    apiKey: "AIzaSyB4gHXhzyZffzAYe9u0rbY5Ix31HY-IUxk",
+    authDomain: "routingplanner-7db49.firebaseapp.com",
+    databaseURL: "https://routingplanner-7db49.firebaseio.com",
+    projectId: "routingplanner-7db49",
+    storageBucket: "routingplanner-7db49.appspot.com",
+    messagingSenderId: "936066364251"
+};
+//# sourceMappingURL=app.firebase.config.js.map
 
 /***/ }),
 
@@ -180,27 +197,27 @@ webpackEmptyAsyncContext.id = 287;
 
 var map = {
 	"../pages/home/home.module": [
-		1186,
+		1187,
 		2
 	],
 	"../pages/info/info.module": [
-		1187,
+		1188,
 		5
 	],
 	"../pages/login/login.module": [
-		1188,
+		1189,
 		4
 	],
 	"../pages/routing/routing.module": [
-		1189,
+		1190,
 		0
 	],
 	"../pages/start/start.module": [
-		1190,
+		1191,
 		1
 	],
 	"../pages/tasks/tasks.module": [
-		1191,
+		1192,
 		3
 	]
 };
@@ -325,7 +342,7 @@ var InfoPage = /** @class */ (function () {
     };
     InfoPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["m" /* Component */])({
-            selector: 'page-info',template:/*ion-inline-start:"/Users/alexandersteurer/Routeplanner/src/pages/info/info.html"*/'<!--\n  Generated template for the InfoPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Client´s Page</ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)="closeModal()"><ion-icon name="close"></ion-icon></button>\n\n    </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content >\n\n    <ion-card #textblock tappable>\n        <ion-item-sliding >\n        <ion-item>\n          \n          <h2>{{this.clientsProvider.clientdata.title}}</h2>\n          <p>{{this.clientsProvider.clientdata.address}}</p>\n        </ion-item>\n      \n      </ion-item-sliding>\n          </ion-card>\n        \n         \n        <ion-list>\n          <ion-list-header>\n            Choose an intervall in days:\n              \n           </ion-list-header>\n           <ion-badge item-start> {{this.clientsProvider.clientdata.intervall}}</ion-badge>\n        <ion-item>\n          <ion-range min="0" max="365" pin = "true" [(ngModel)]="day_intervall" color="primary">\n              <ion-label range-left>No intervall</ion-label>\n              <ion-label range-right>Day´s</ion-label>\n            </ion-range>\n                \n        </ion-item>\n        <button ion-button (click)="resetTimeStamp()">Reset intervall</button>\n        </ion-list>\n            \n          \n       \n       \n\n    \n    <ion-item  tappable>\n     \n          \n      </ion-item>\n   \n    <h2>Additional Client Information:</h2>\n    <p>{{this.clientsProvider.clientdata.info}}</p> \n    <ion-textarea [(ngModel)]="infoText"> {{infoText}} </ion-textarea>\n        <button ion-button small (click)="updateInformation(this.clientsProvider.clientdata.docId)">Update Client</button>  \n        <p>{{this.clientsProvider.clientdata.id}}</p>\n      \n    \n   \n      \n        \n          \n            \n           \n     \n  \n   \n   \n   <!--  (click)="edit(client)"  -->\n  </ion-content>'/*ion-inline-end:"/Users/alexandersteurer/Routeplanner/src/pages/info/info.html"*/,
+            selector: 'page-info',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/info/info.html"*/'<!--\n  Generated template for the InfoPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Client´s Page</ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)="closeModal()"><ion-icon name="close"></ion-icon></button>\n\n    </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content >\n\n    <ion-card #textblock tappable>\n        <ion-item-sliding >\n        <ion-item>\n          \n          <h2>{{this.clientsProvider.clientdata.title}}</h2>\n          <p>{{this.clientsProvider.clientdata.address}}</p>\n        </ion-item>\n      \n      </ion-item-sliding>\n          </ion-card>\n        \n         \n        <ion-list>\n          <ion-list-header>\n            Choose an intervall in days:\n              \n           </ion-list-header>\n           <ion-badge item-start> {{this.clientsProvider.clientdata.intervall}}</ion-badge>\n        <ion-item>\n          <ion-range min="0" max="365" pin = "true" [(ngModel)]="day_intervall" color="primary">\n              <ion-label range-left>No intervall</ion-label>\n              <ion-label range-right>Day´s</ion-label>\n            </ion-range>\n                \n        </ion-item>\n        <button ion-button (click)="resetTimeStamp()">Reset intervall</button>\n        </ion-list>\n            \n          \n       \n       \n\n    \n    <ion-item  tappable>\n     \n          \n      </ion-item>\n   \n    <h2>Additional Client Information:</h2>\n    <p>{{this.clientsProvider.clientdata.info}}</p> \n    <ion-textarea [(ngModel)]="infoText"> {{infoText}} </ion-textarea>\n        <button ion-button small (click)="updateInformation(this.clientsProvider.clientdata.docId)">Update Client</button>  \n        <p>{{this.clientsProvider.clientdata.id}}</p>\n      \n    \n   \n      \n        \n          \n            \n           \n     \n  \n   \n   \n   <!--  (click)="edit(client)"  -->\n  </ion-content>'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/info/info.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5_angularfire2_firestore__["a" /* AngularFirestore */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["p" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular_navigation_view_controller__["a" /* ViewController */], __WEBPACK_IMPORTED_MODULE_0__providers_clients_clients__["a" /* ClientsProvider */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* ModalController */], __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__["a" /* AngularFireAuth */]])
     ], InfoPage);
@@ -368,6 +385,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_geolocation__ = __webpack_require__(563);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_clients_clients__ = __webpack_require__(254);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_ionic2_super_tabs__ = __webpack_require__(564);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__app_firebase_config__ = __webpack_require__(1186);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -387,14 +405,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var environment = {
-    apiKey: "AIzaSyB4gHXhzyZffzAYe9u0rbY5Ix31HY-IUxk",
-    authDomain: "routingplanner-7db49.firebaseapp.com",
-    databaseURL: "https://routingplanner-7db49.firebaseio.com",
-    projectId: "routingplanner-7db49",
-    storageBucket: "routingplanner-7db49.appspot.com",
-    messagingSenderId: "936066364251"
-};
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -406,7 +417,7 @@ var AppModule = /** @class */ (function () {
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_7_angularfire2__["a" /* AngularFireModule */].initializeApp(environment),
+                __WEBPACK_IMPORTED_MODULE_7_angularfire2__["a" /* AngularFireModule */].initializeApp(__WEBPACK_IMPORTED_MODULE_13__app_firebase_config__["a" /* FIREBASE_CONFIG */]),
                 __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {}, {
                     links: [
                         { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
