@@ -1,60 +1,67 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading, AlertController } from 'ionic-angular';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AngularFireAuth } from 'angularfire2/auth';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams, LoadingController, Loading, AlertController} from 'ionic-angular';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {AngularFireAuth} from 'angularfire2/auth';
 
 @IonicPage()
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html',
+    selector: 'page-login',
+    templateUrl: 'login.html',
 })
 export class LoginPage {
-  public loginForm: FormGroup;
-  loading: Loading;
 
-  constructor(public navCtrl: NavController, private formBuilder: FormBuilder, 
-    private afAuth: AngularFireAuth, private loadignCtrl: LoadingController, private alertCtrl: AlertController) {
-    this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.compose([Validators.minLength(6), Validators.required])]
-    });
-  }
+    public loginForm: FormGroup;
+    loading: Loading;
 
-  signupUser() {
-    this.loading = this.loadignCtrl.create();
-    this.loading.present();
+    constructor(public navCtrl: NavController, private formBuilder: FormBuilder,
+                private afAuth: AngularFireAuth,
+                private loadingController: LoadingController,
+                private alertCtrl: AlertController) {
 
-    this.afAuth.auth.createUserWithEmailAndPassword(this.loginForm.value.email, this.loginForm.value.password)
-    .then(data => {
-      this.loading.dismiss();
-    }, err => {
-      this.loading.dismiss().then(() => {
-        this.showBasicAlert('Error', err.message);
-      })
-    });
-  }
+        this.loginForm = this.formBuilder.group({
+            email: ['', Validators.required],
+            password: ['', Validators.compose(
+                [Validators.minLength(6), Validators.required]
+            )]
+        });
+    }
 
-  loginUser() {
-    this.loading = this.loadignCtrl.create();
-    this.loading.present();
+    signUpUser() {
+        this.loading = this.loadingController.create();
+        this.loading.present();
 
-    this.afAuth.auth.signInWithEmailAndPassword(this.loginForm.value.email, this.loginForm.value.password)
-    .then(data => {
-      this.loading.dismiss();
-    }, err => {
-      this.loading.dismiss().then(() => {
-        this.showBasicAlert('Error', err.message);
-      })
-    });
-  }
+        this.afAuth.auth.createUserWithEmailAndPassword(
+            this.loginForm.value.email, this.loginForm.value.password)
+            .then(data => {
+                this.loading.dismiss();
+            }, err => {
+                this.loading.dismiss().then(() => {
+                    this.showBasicAlert('Error', err.message);
+                })
+            });
+    }
 
-  showBasicAlert(title, text) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: text,
-      buttons: ['OK']
-    });
-    alert.present();
-  }
+    loginUser() {
+        this.loading = this.loadingController.create();
+        this.loading.present();
 
+        this.afAuth.auth.signInWithEmailAndPassword(
+            this.loginForm.value.email, this.loginForm.value.password)
+            .then(data => {
+                this.loading.dismiss();
+            }, err => {
+                this.loading.dismiss().then(() => {
+                    this.showBasicAlert('Error', err.message);
+                })
+            });
+    }
+
+    showBasicAlert(title, text) {
+        let alert = this.alertCtrl.create({
+            title: title,
+            subTitle: text,
+            buttons: ['OK']
+        });
+        alert.present();
+    }
 }
