@@ -28,6 +28,7 @@ plugins/
 plugins/android.json
 plugins/ios.json
 v2/www/build/
+/www/
 www/
 www/build/
 $RECYCLE.BIN/
@@ -37,3 +38,9 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 
 app.firebase.config.ts
+0.js
+1.js
+2.js
+3.js
+4.js
+5.js
