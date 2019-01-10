@@ -1,7 +1,7 @@
 import {StartPage} from './../start/start';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {Component, ViewChild, ElementRef} from '@angular/core';
-import {IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from '@ionic-native/geolocation';
 import {SuperTabs} from 'ionic2-super-tabs';
 import firebase from 'firebase';
@@ -16,6 +16,7 @@ export class HomePage {
     userId: any;
     db = firebase.firestore();
     public map: any;
+    //what does google do?
     google: any;
 
     pages = [
@@ -24,12 +25,13 @@ export class HomePage {
         {pageName: 'TasksPage', title: 'EasyRoute - Tasks', icon: 'create', id: 'taskTab'},
     ];
 
+    //When user opens the app, Google Map should always be the entry point.
     selectedTab = 1;
 
     @ViewChild(SuperTabs) superTabs: SuperTabs;
 
-    constructor(public navCtrl: NavController, private afAuth: AngularFireAuth, public geolocation: Geolocation
-        , public navParams: NavParams, private alertCtrl: AlertController,) {
+    constructor(public navCtrl: NavController, private afAuth: AngularFireAuth,
+                public geolocation: Geolocation, public navParams: NavParams) {
 
     }
 
@@ -38,32 +40,12 @@ export class HomePage {
 
     }
 
-    onTabSelect(ev: any) {
-        if (ev.index === 1) {
-            () => {
-                this.selectedTab = ev.index;
-            }
-            /* let alert = this.alertCtrl.create({
-              title: 'Secret Page',
-              message: 'Are you sure you want to access that page?',
-              buttons: [
-                {
-                  text: 'No',
-                  handler: () => {
-                    this.superTabs.slideTo(this.selectedTab);
-                  }
-                }, {
-                  text: 'Yes',
-
-                  }
-                }
-              ]
-            });
-            alert.present(); */
-        } else {
-            this.selectedTab = ev.index;
-            this.superTabs.clearBadge(this.pages[ev.index].id);
+    //clear badge when user not on Google Maps
+    onTabSelect(tab: any) {
+        if (tab.index !== 1) {
+            this.superTabs.clearBadge(this.pages[tab.index].id);
         }
+        this.selectedTab = tab.index;
     }
 
     logout() {

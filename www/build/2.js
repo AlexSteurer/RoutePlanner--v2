@@ -21722,50 +21722,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var HomePage = /** @class */ (function () {
-    function HomePage(navCtrl, afAuth, geolocation, navParams, alertCtrl) {
+    function HomePage(navCtrl, afAuth, geolocation, navParams) {
         this.navCtrl = navCtrl;
         this.afAuth = afAuth;
         this.geolocation = geolocation;
         this.navParams = navParams;
-        this.alertCtrl = alertCtrl;
         this.db = __WEBPACK_IMPORTED_MODULE_5_firebase___default.a.firestore();
         this.pages = [
             { pageName: 'RoutingPage', title: 'EasyRoute - RoutePlanner', icon: 'contacts', id: 'routeTab' },
             { pageName: 'StartPage', title: 'Easyroute - Map', icon: 'map', id: 'mapTab' },
             { pageName: 'TasksPage', title: 'EasyRoute - Tasks', icon: 'create', id: 'taskTab' },
         ];
+        //When user opens the app, Google Map should always be the entry point.
         this.selectedTab = 1;
     }
     HomePage.prototype.ionViewDidLoad = function () {
     };
-    HomePage.prototype.onTabSelect = function (ev) {
-        var _this = this;
-        if (ev.index === 1) {
-            (function () {
-                _this.selectedTab = ev.index;
-            });
-            /* let alert = this.alertCtrl.create({
-              title: 'Secret Page',
-              message: 'Are you sure you want to access that page?',
-              buttons: [
-                {
-                  text: 'No',
-                  handler: () => {
-                    this.superTabs.slideTo(this.selectedTab);
-                  }
-                }, {
-                  text: 'Yes',
-
-                  }
-                }
-              ]
-            });
-            alert.present(); */
+    //clear badge when user not on Google Maps
+    HomePage.prototype.onTabSelect = function (tab) {
+        if (tab.index !== 1) {
+            this.superTabs.clearBadge(this.pages[tab.index].id);
         }
-        else {
-            this.selectedTab = ev.index;
-            this.superTabs.clearBadge(this.pages[ev.index].id);
-        }
+        this.selectedTab = tab.index;
     };
     HomePage.prototype.logout = function () {
         this.afAuth.auth.signOut();
@@ -21778,10 +21756,10 @@ var HomePage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/home/home.html"*/'<ion-header no-border>\n    <ion-navbar color="primary">\n        <ion-buttons left>\n            <button ion-button icon-only (click)="logout()">\n                <ion-icon name="log-out"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-title>{{ pages[selectedTab].title }}</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content no-border>\n    <super-tabs selectedTabIndex="1" [config]="{dragThreshold: \'300\'}" [config]="{transitionDuration: \'300\'}"\n                [config]="{allowElementScroll: true}" tabsPlacement="bottom" toolbarBackground="primary"\n                toolbarColor="light" indicatorColor="light"\n                (tabSelect)="onTabSelect($event)">\n        <super-tab *ngFor="let page of pages" [root]="page.pageName" [icon]="page.icon" [id]="page.id"></super-tab>\n    </super-tabs>\n</ion-content>\n\n\n\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/home/home.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["p" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["p" /* NavParams */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* AlertController */]) === "function" && _f || Object])
+        __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["p" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["p" /* NavParams */]) === "function" && _e || Object])
     ], HomePage);
     return HomePage;
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=home.js.map
