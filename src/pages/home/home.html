@@ -1,27 +1,21 @@
 <ion-header no-border>
-  <ion-navbar color="primary">
-    <ion-buttons left>
-      <button ion-button icon-only (click)="logout()">
-        <ion-icon name="log-out"></ion-icon>
-      </button>
-    </ion-buttons>
-
-      <ion-title>{{ pages[selectedTab].title }}</ion-title>
- 
-  </ion-navbar>
- 
-
+    <ion-navbar color="primary">
+        <ion-buttons left>
+            <button ion-button icon-only (click)="logout()">
+                <ion-icon name="log-out"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>{{ pages[selectedTab].title }}</ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content no-border>
-    <super-tabs selectedTabIndex="1" [config]="{dragThreshold: '300'}" [config]="{transitionDuration: '300'}" [config]="{allowElementScroll: true}"  tabsPlacement="bottom" toolbarBackground="primary" toolbarColor="light" indicatorColor="light"
-    (tabSelect)="onTabSelect($event)">
-    <super-tab *ngFor="let page of pages" [root]="page.pageName" [icon]="page.icon" [id]="page.id"></super-tab>
-  </super-tabs>
-
-  
-
-
+    <super-tabs selectedTabIndex="1" [config]="{dragThreshold: '300'}" [config]="{transitionDuration: '300'}"
+                [config]="{allowElementScroll: true}" tabsPlacement="bottom" toolbarBackground="primary"
+                toolbarColor="light" indicatorColor="light"
+                (tabSelect)="onTabSelect($event)">
+        <super-tab *ngFor="let page of pages" [root]="page.pageName" [icon]="page.icon" [id]="page.id"></super-tab>
+    </super-tabs>
 </ion-content>
 
 
