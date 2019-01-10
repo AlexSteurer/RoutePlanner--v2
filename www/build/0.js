@@ -21729,78 +21729,83 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var RoutingPage = /** @class */ (function () {
-    function RoutingPage(navCtrl, navParams, clientsprovider, afAuth, events, modalCtrl) {
+    function RoutingPage(navCtrl, navParams, clientsProvider, afAuth, events, modalCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
-        this.clientsprovider = clientsprovider;
+        this.clientsProvider = clientsProvider;
         this.afAuth = afAuth;
         this.events = events;
         this.modalCtrl = modalCtrl;
         this.searchQuery = '';
-        this.clientList = this.clientsprovider.getCLients();
+        this.clientList = this.clientsProvider.getCLients();
     }
+    RoutingPage.prototype.ionViewDidLoad = function () {
+        this.clientList = this.clientsProvider.getCLients();
+        console.log(this.clientList);
+        console.log('ionViewDidLoad RoutingPage');
+    };
     // Liste wird nicht geupdatet.. .warum auch immer....
-    RoutingPage.prototype.getItems = function (ev) {
+    RoutingPage.prototype.getItems = function (event) {
         var _this = this;
-        this.clientsprovider.getCLients();
-        var val = ev.target.value;
-        this.clientsprovider.getCLients().subscribe(function (client) {
+        this.clientsProvider.getCLients();
+        var val = event.target.value;
+        this.clientsProvider.getCLients().subscribe(function (client) {
             _this.clientList = client;
             console.log(client.title);
-            _this.clientList = _this.clientsprovider.getCLients().filter((function (client) {
+            _this.clientList = _this.clientsProvider.getCLients()
+                .filter((function (client) {
                 if (val && val.trim() !== '') {
-                    return client.title.toLowerCase().indexOf(val.toLowerCase()) > -1;
+                    return client.title
+                        .toLowerCase().indexOf(val.toLowerCase()) > -1;
                 }
             }));
         });
     };
-    // set val to the value of the searchbar
+    // set val to the value of the search bar
     //if the value is an empty string don't filter the items
     RoutingPage.prototype.edit = function (docId) {
         var _this = this;
         console.log(docId);
-        var clientsProvider = this.clientsprovider;
+        var clientsProvider = this.clientsProvider;
         var db = __WEBPACK_IMPORTED_MODULE_5_firebase___default.a.firestore();
         this.afAuth.authState.subscribe(function (user) {
-            if (user)
+            if (user) {
                 _this.userId = user.uid;
+            }
             db.collection(user.uid).doc(docId)
                 .get()
                 .then(function (doc) {
                 if (doc.exists) {
-                    clientsProvider.clientdata.title = doc.data().title;
-                    console.log(clientsProvider.clientdata.title);
-                    clientsProvider.clientdata.address = doc.data().adress;
-                    console.log(clientsProvider.clientdata.address);
-                    clientsProvider.clientdata.id = doc.data().placeId;
-                    console.log(clientsProvider.clientdata.id);
-                    clientsProvider.clientdata.info = doc.data().extra_info;
-                    console.log(clientsProvider.clientdata.info);
-                    clientsProvider.clientdata.timestamp = doc.data().timestamp;
-                    clientsProvider.clientdata.docId = docId;
-                    clientsProvider.clientdata.intervall = doc.data().intervall;
-                    console.log(clientsProvider.clientdata.docId);
+                    this.setClientDataAttributes(clientsProvider, doc, docId);
                 }
             });
         });
         var modal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_0__info_info__["a" /* InfoPage */]);
         modal.present();
     };
-    ;
+    RoutingPage.prototype.setClientDataAttributes = function (clientsProvider, doc, docId) {
+        clientsProvider.clientdata.title = doc.data().title;
+        console.log(clientsProvider.clientdata.title);
+        clientsProvider.clientdata.address = doc.data().adress;
+        console.log(clientsProvider.clientdata.address);
+        clientsProvider.clientdata.id = doc.data().placeId;
+        console.log(clientsProvider.clientdata.id);
+        clientsProvider.clientdata.info = doc.data().extra_info;
+        console.log(clientsProvider.clientdata.info);
+        clientsProvider.clientdata.timestamp = doc.data().timestamp;
+        clientsProvider.clientdata.docId = docId;
+        clientsProvider.clientdata.intervall = doc.data().intervall;
+        console.log(clientsProvider.clientdata.docId);
+    };
     RoutingPage.prototype.delete = function (client) {
-        this.clientsprovider.removeClient(client.id);
+        this.clientsProvider.removeClient(client.id);
         console.log('Client deleted!');
         this.events.publish('client:deleted', client);
     };
     ;
-    RoutingPage.prototype.ionViewDidLoad = function () {
-        this.clientList = this.clientsprovider.getCLients();
-        console.log(this.clientList);
-        console.log('ionViewDidLoad RoutingPage');
-    };
     RoutingPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["m" /* Component */])({
-            selector: 'page-routing',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/routing/routing.html"*/'<!--\n  Generated template for the RoutingPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n      <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content >\n  <ion-list>\n      <ion-card >\n    <ion-item-sliding *ngFor="let client of clientList | async">\n      \n        <ion-item  tappable>\n        <h2>{{client.title}}</h2>\n        \n          </ion-item>\n          \n          <ion-item-options side="right">\n              <button ion-button color="secondary" (click)="edit(client.id)">\n                  <ion-icon name="build"></ion-icon>\n                </button>\n              <button ion-button color="danger" (click)="delete(client)">\n                  <ion-icon name="trash"></ion-icon>\n                </button>\n            \n           \n          </ion-item-options>\n\n\n    </ion-item-sliding>\n  </ion-card>\n    \n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/routing/routing.html"*/,
+            selector: 'page-routing',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/routing/routing.html"*/'<!--\n  Generated template for the RoutingPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n    <ion-navbar>\n        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n    </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n    <ion-list>\n        <ion-card>\n            <ion-item-sliding *ngFor="let client of clientList | async">\n\n                <ion-item tappable>\n                    <h2>{{client.title}}</h2>\n                </ion-item>\n\n                <ion-item-options side="right">\n                    <button ion-button color="secondary" (click)="edit(client.id)">\n                        <ion-icon name="build"></ion-icon>\n                    </button>\n                    <button ion-button color="danger" (click)="delete(client)">\n                        <ion-icon name="trash"></ion-icon>\n                    </button>\n                </ion-item-options>\n            </ion-item-sliding>\n        </ion-card>\n    </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/routing/routing.html"*/,
         }),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["n" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["n" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["p" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["p" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__providers_clients_clients__["a" /* ClientsProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_clients_clients__["a" /* ClientsProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["f" /* Events */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["f" /* Events */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["m" /* ModalController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["m" /* ModalController */]) === "function" && _f || Object])
     ], RoutingPage);
