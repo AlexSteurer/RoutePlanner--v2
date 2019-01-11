@@ -1,10 +1,14 @@
 import {StartPage} from './../start/start';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {Component, ViewChild} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
 import {Geolocation} from '@ionic-native/geolocation';
 import {SuperTabs} from 'ionic2-super-tabs';
 import firebase from 'firebase';
+import {CustomAlertMessage} from "../../model/customAlertMessage";
+import {error} from "util";
+import {LoginPage} from "../login/login";
+import {UserLogout} from "../../helper/userLogout";
 
 @IonicPage()
 @Component({
@@ -18,6 +22,7 @@ export class HomePage {
     public map: any;
     //what does google do?
     google: any;
+    private customAlertMessage: CustomAlertMessage;
 
     pages = [
         {pageName: 'RoutingPage', title: 'EasyRoute - RoutePlanner', icon: 'contacts', id: 'routeTab'},
@@ -31,8 +36,10 @@ export class HomePage {
     @ViewChild(SuperTabs) superTabs: SuperTabs;
 
     constructor(public navCtrl: NavController, private afAuth: AngularFireAuth,
-                public geolocation: Geolocation, public navParams: NavParams) {
+                public geolocation: Geolocation, public navParams: NavParams,
+                private alertController: AlertController,) {
 
+        this.customAlertMessage = new CustomAlertMessage(this.alertController);
     }
 
     ionViewDidLoad() {
@@ -49,7 +56,9 @@ export class HomePage {
     }
 
     logout() {
-        this.afAuth.auth.signOut();
+        this.afAuth.auth.signOut()
+            .then(() => this.navCtrl.setRoot(LoginPage))
+            .catch(failure => console.log("Logout fail", failure.error)); /*this.customAlertMessage.errorAlert(failure.error))*/
     }
 }
 
