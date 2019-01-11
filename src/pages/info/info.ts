@@ -110,7 +110,7 @@ export class InfoPage {
                     extra_info: this.infoText,
                     time_chosen: this.new_date,
                     time_half: this.day_interval_half,
-                    intervall: this.day_interval,
+                    interval: this.day_interval,
                 })
         });
 

@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 1190:
+/***/ 1191:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RoutingPageModule", function() { return RoutingPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routing__ = __webpack_require__(1200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routing__ = __webpack_require__(1201);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21691,7 +21691,7 @@ registerStorage(__WEBPACK_IMPORTED_MODULE_0__firebase_app___default.a);
 
 /***/ }),
 
-/***/ 1200:
+/***/ 1201:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21703,7 +21703,7 @@ registerStorage(__WEBPACK_IMPORTED_MODULE_0__firebase_app___default.a);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase__ = __webpack_require__(1193);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_firebase__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__ = __webpack_require__(1201);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__ = __webpack_require__(1202);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_filter__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -21786,7 +21786,7 @@ var RoutingPage = /** @class */ (function () {
     RoutingPage.prototype.setClientDataAttributes = function (clientsProvider, doc, docId) {
         clientsProvider.clientdata.title = doc.data().title;
         console.log(clientsProvider.clientdata.title);
-        clientsProvider.clientdata.address = doc.data().adress;
+        clientsProvider.clientdata.address = doc.data().address;
         console.log(clientsProvider.clientdata.address);
         clientsProvider.clientdata.id = doc.data().placeId;
         console.log(clientsProvider.clientdata.id);
@@ -21794,7 +21794,7 @@ var RoutingPage = /** @class */ (function () {
         console.log(clientsProvider.clientdata.info);
         clientsProvider.clientdata.timestamp = doc.data().timestamp;
         clientsProvider.clientdata.docId = docId;
-        clientsProvider.clientdata.intervall = doc.data().intervall;
+        clientsProvider.clientdata.intervall = doc.data().interval;
         console.log(clientsProvider.clientdata.docId);
     };
     RoutingPage.prototype.delete = function (client) {
@@ -21817,31 +21817,31 @@ var RoutingPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 1201:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(1202);
-//# sourceMappingURL=filter.js.map
-
-/***/ }),
-
 /***/ 1202:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var rxjs_1 = __webpack_require__(28);
-var filter_1 = __webpack_require__(1203);
-rxjs_1.Observable.prototype.filter = filter_1.filter;
+__webpack_require__(1203);
 //# sourceMappingURL=filter.js.map
 
 /***/ }),
 
 /***/ 1203:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var rxjs_1 = __webpack_require__(28);
+var filter_1 = __webpack_require__(1204);
+rxjs_1.Observable.prototype.filter = filter_1.filter;
+//# sourceMappingURL=filter.js.map
+
+/***/ }),
+
+/***/ 1204:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

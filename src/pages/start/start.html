@@ -5,38 +5,20 @@
   Ionic pages and navigation.
 -->
 <ion-header no-border>
-  
-    
-           
-        <ion-searchbar no-border [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
-      
-      
-   
-    <ion-list  [hidden]="autocompleteItems.length == 0" >
-      <ion-item  text-wrap *ngFor="let item of autocompleteItems" >
-          
-           <button ion-button color="green" (tap)="selectSearchResult(item)">
-          <ion-icon name="add"> Add Client</ion-icon> 
-        </button> 
-        <p  #searchlist>  {{ item.description }} </p>
-     
-       
-        <!-- <ion-item-options side="right">
-            <button ion-button color="danger" >
-              <ion-icon name="trash"></ion-icon>
+    <ion-searchbar no-border [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()"
+                   placeholder="Search for a place"></ion-searchbar>
+
+    <ion-list [hidden]="autocompleteItems.length == 0">
+        <ion-item text-wrap *ngFor="let item of autocompleteItems">
+            <button ion-button color="green" (tap)="selectSearchResult(item)">
+                <ion-icon name="add"> Add Client</ion-icon>
             </button>
-          </ion-item-options> -->
-     
-      </ion-item>
+            <p #searchlist> {{ item.description }} </p>
+        </ion-item>
     </ion-list>
-  
-  
 </ion-header>
-  
 
 
-
-<ion-content >
-    <div #map id= "map"  ></div>
-    
+<ion-content>
+    <div #map id="map"></div>
 </ion-content>
