@@ -93,7 +93,7 @@ export class StartPage {
             });
             toast.present();
         })
-    };
+    }
 
     updateSearchResults() {
         if (this.autocomplete.input === '') {
@@ -105,19 +105,23 @@ export class StartPage {
 
     private showUserPlacePrediction() {
         this.GoogleAutocomplete
-            .getPlacePredictions({input: this.autocomplete.input},
-                (predictions, status) => {
-                    this.autocompleteItems = [];
-                    if (predictions !== null) {
-                        predictions.forEach(
-                            prediction => this.autocompleteItems.push(prediction)
-                        )
-                    }
-                });
+            .getPlacePredictions({
+                input: this.autocomplete.input
+            }, (predictions, status) => {
+                this.autocompleteItems = [];
+                if (predictions !== null) {
+                    predictions.forEach(
+                        prediction => this.autocompleteItems.push(prediction)
+                    )
+                }
+            });
     }
 
+    /**
+     * Sets a marker on maps when user clicks on 'Add Client'.
+     * @param item suggested address from search bar
+     */
     selectSearchResult(item) {
-
         this.markers = [];
         this.autocompleteItems = [];
         this.geocoder
@@ -129,7 +133,6 @@ export class StartPage {
                     this.saveClient();
                     let infoWindow = this.createClientInfoWindow(address);
                     this.addListenerOnGoogleMaps(infoWindow, marker);
-
                     this.markers.push(marker);
                     this.map.setCenter(results[0].geometry.location);
                 }
@@ -137,6 +140,7 @@ export class StartPage {
     }
 
     private addListenerOnGoogleMaps(infoWindow, marker) {
+
         google.maps.event
             .addListenerOnce(infoWindow, 'domready', () => {
                 document.getElementById('myid')
@@ -307,21 +311,8 @@ export class StartPage {
 
 
     loadMap() {
-        this.geolocation.getCurrentPosition().then((position) => {
-            let latLng = new google.maps
-                .LatLng(position.coords.latitude, position.coords.longitude);
-
-            let mapOptions = {
-                center: latLng,
-                zoom: 12,
-                mapTypeId: google.maps.MapTypeId.TERRAIN,
-                clickableIcons: false,
-                disableDefaultUI: true,
-                zoomControl: true,
-                zoomControlOptions: {
-                    position: google.maps.ControlPosition.RIGHT_BOTTOM
-                }
-            };
+        this.geolocation.getCurrentPosition().then(position => {
+            let mapOptions = this.createMapOptions(position);
             let styledMapType = this.createStyledMap();
             this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
             this.map.mapTypes.set('styled_map', styledMapType);
@@ -330,6 +321,25 @@ export class StartPage {
         }, (err) => {
             console.log(err);
         });
+    }
+
+    private createMapOptions(position) {
+
+        let latLng = new google.maps
+            .LatLng(position.coords.latitude, position.coords.longitude);
+
+        let mapOptions = {
+            center: latLng,
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            clickableIcons: false,
+            disableDefaultUI: true,
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.RIGHT_BOTTOM
+            }
+        };
+        return mapOptions;
     }
 
     private createStyledMap() {
