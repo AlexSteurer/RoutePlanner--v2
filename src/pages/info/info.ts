@@ -63,8 +63,8 @@ export class InfoPage {
     }
 
     resetTimeStamp() {
-        let inter = this.clientsProvider.clientdata.intervall;
-        let half = math.round(this.clientsProvider.clientdata.intervall / 2);
+        let inter = this.clientsProvider.clientData.interval;
+        let half = math.round(this.clientsProvider.clientData.interval / 2);
         let new_full = moment(this.currentDate).add(inter, 'days').toDate();
         let new_half = moment(this.currentDate).add(half, 'days').toDate();
 
@@ -73,7 +73,7 @@ export class InfoPage {
                 this.userId = user.uid
             }
             return this.afs
-                .doc(user.uid + '/' + this.clientsProvider.clientdata.docId)
+                .doc(user.uid + '/' + this.clientsProvider.clientData.docId)
                 .update({
                     time_chosen: new_full,
                     time_half: new_half,
@@ -105,7 +105,7 @@ export class InfoPage {
                 this.userId = user.uid;
             }
             return this.afs
-                .doc(user.uid + '/' + this.clientsProvider.clientdata.docId)
+                .doc(user.uid + '/' + this.clientsProvider.clientData.docId)
                 .update({
                     extra_info: this.infoText,
                     time_chosen: this.new_date,

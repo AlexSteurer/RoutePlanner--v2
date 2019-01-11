@@ -37,25 +37,25 @@ export class RoutingPage {
                 private afAuth: AngularFireAuth, public events: Events,
                 public modalCtrl: ModalController) {
 
-        this.clientList = this.clientsProvider.getCLients();
+        this.clientList = this.clientsProvider.getClients();
     }
 
     ionViewDidLoad() {
-        this.clientList = this.clientsProvider.getCLients();
+        this.clientList = this.clientsProvider.getClients();
         console.log(this.clientList);
         console.log('ionViewDidLoad RoutingPage');
     }
 
     // Liste wird nicht geupdatet.. .warum auch immer....
     getItems(event: any) {
-        this.clientsProvider.getCLients();
+        this.clientsProvider.getClients();
 
         const val = event.target.value;
 
-        this.clientsProvider.getCLients().subscribe(client => {
+        this.clientsProvider.getClients().subscribe(client => {
             this.clientList = client;
             console.log(client.title);
-            this.clientList = this.clientsProvider.getCLients()
+            this.clientList = this.clientsProvider.getClients()
                 .filter((function (client) {
                     if (val && val.trim() !== '') {
                         return client.title
@@ -90,18 +90,18 @@ export class RoutingPage {
     }
 
     private setClientDataAttributes(clientsProvider, doc, docId) {
-        clientsProvider.clientdata.title = doc.data().title;
-        console.log(clientsProvider.clientdata.title);
-        clientsProvider.clientdata.address = doc.data().address;
-        console.log(clientsProvider.clientdata.address);
-        clientsProvider.clientdata.id = doc.data().placeId;
-        console.log(clientsProvider.clientdata.id);
-        clientsProvider.clientdata.info = doc.data().extra_info;
-        console.log(clientsProvider.clientdata.info);
-        clientsProvider.clientdata.timestamp = doc.data().timestamp;
-        clientsProvider.clientdata.docId = docId;
-        clientsProvider.clientdata.intervall = doc.data().interval;
-        console.log(clientsProvider.clientdata.docId);
+        clientsProvider.clientData.title = doc.data().title;
+        console.log(clientsProvider.clientData.title);
+        clientsProvider.clientData.address = doc.data().address;
+        console.log(clientsProvider.clientData.address);
+        clientsProvider.clientData.id = doc.data().placeId;
+        console.log(clientsProvider.clientData.id);
+        clientsProvider.clientData.info = doc.data().extra_info;
+        console.log(clientsProvider.clientData.info);
+        clientsProvider.clientData.timestamp = doc.data().timestamp;
+        clientsProvider.clientData.docId = docId;
+        clientsProvider.clientData.interval = doc.data().interval;
+        console.log(clientsProvider.clientData.docId);
     }
 
     delete(client) {
