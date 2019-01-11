@@ -197,11 +197,11 @@ webpackEmptyAsyncContext.id = 287;
 
 var map = {
 	"../pages/home/home.module": [
-		1187,
+		1188,
 		2
 	],
 	"../pages/info/info.module": [
-		1188,
+		1187,
 		5
 	],
 	"../pages/login/login.module": [
@@ -209,11 +209,11 @@ var map = {
 		4
 	],
 	"../pages/routing/routing.module": [
-		1190,
+		1191,
 		0
 	],
 	"../pages/start/start.module": [
-		1191,
+		1190,
 		1
 	],
 	"../pages/tasks/tasks.module": [
@@ -430,11 +430,11 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_7_angularfire2__["a" /* AngularFireModule */].initializeApp(__WEBPACK_IMPORTED_MODULE_13__app_firebase_config__["a" /* FIREBASE_CONFIG */]),
                 __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {}, {
                     links: [
-                        { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/info/info.module#InfoPageModule', name: 'InfoPage', segment: 'info', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/routing/routing.module#RoutingPageModule', name: 'RoutingPage', segment: 'routing', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/start/start.module#StartPageModule', name: 'StartPage', segment: 'start', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/routing/routing.module#RoutingPageModule', name: 'RoutingPage', segment: 'routing', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tasks/tasks.module#TasksPageModule', name: 'TasksPage', segment: 'tasks', priority: 'low', defaultHistory: [] }
                     ]
                 }),
