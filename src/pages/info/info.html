@@ -20,8 +20,8 @@
     <ion-card #textblock tappable>
         <ion-item-sliding>
             <ion-item>
-                <h2>{{this.clientsProvider.clientdata.title}}</h2>
-                <p>{{this.clientsProvider.clientdata.address}}</p>
+                <h2>{{this.clientsProvider.clientData.title}}</h2>
+                <p>{{this.clientsProvider.clientData.address}}</p>
             </ion-item>
         </ion-item-sliding>
     </ion-card>
@@ -31,7 +31,7 @@
         <ion-list-header>
             Choose an interval in days:
         </ion-list-header>
-        <ion-badge item-start> {{this.clientsProvider.clientdata.intervall}}</ion-badge>
+        <ion-badge item-start> {{this.clientsProvider.clientData.interval}}</ion-badge>
         <ion-item>
             <ion-range min="0" max="365" pin="true" [(ngModel)]="day_interval" color="primary">
                 <ion-label range-left>No intervall</ion-label>
@@ -46,10 +46,10 @@
     </ion-item>
 
     <h2>Additional Client Information:</h2>
-    <p>{{this.clientsProvider.clientdata.info}}</p>
+    <p>{{this.clientsProvider.clientData.info}}</p>
     <ion-textarea [(ngModel)]="infoText"> {{infoText}}</ion-textarea>
-    <button ion-button small (click)="updateInformation(this.clientsProvider.clientdata.docId)">Update Client</button>
-    <p>{{this.clientsProvider.clientdata.id}}</p>
+    <button ion-button small (click)="updateInformation(this.clientsProvider.clientData.docId)">Update Client</button>
+    <p>{{this.clientsProvider.clientData.id}}</p>
 
     <!--  (click)="edit(client)"  -->
 </ion-content>

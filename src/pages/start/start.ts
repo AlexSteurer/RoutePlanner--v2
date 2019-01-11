@@ -210,16 +210,16 @@ export class StartPage {
     private setClientData(doc, lat, lng, clientsProvider) {
         doc.data().location._lat = lat;
         doc.data().location._lng = lng;
-        clientsProvider.clientdata.info = doc.data().extra_info;
+        clientsProvider.clientData.info = doc.data().extra_info;
         //location = new firebase.firestore.GeoPoint(lat,lng);
-        clientsProvider.clientdata.title = doc.data().title;
-        console.log(clientsProvider.clientdata.title);
-        clientsProvider.clientdata.address = doc.data().address;
-        console.log(clientsProvider.clientdata.address);
-        clientsProvider.clientdata.id = doc.data().placeId;
-        console.log(clientsProvider.clientdata.id);
-        clientsProvider.clientdata.timestamp = doc.data().timestamp;
-        clientsProvider.clientdata.bool = true;
+        clientsProvider.clientData.title = doc.data().title;
+        console.log(clientsProvider.clientData.title);
+        clientsProvider.clientData.address = doc.data().address;
+        console.log(clientsProvider.clientData.address);
+        clientsProvider.clientData.id = doc.data().placeId;
+        console.log(clientsProvider.clientData.id);
+        clientsProvider.clientData.timestamp = doc.data().timestamp;
+        clientsProvider.clientData.bool = true;
     }
 
     /*createListMarkers(){

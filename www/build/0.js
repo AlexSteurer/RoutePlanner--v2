@@ -21737,22 +21737,22 @@ var RoutingPage = /** @class */ (function () {
         this.events = events;
         this.modalCtrl = modalCtrl;
         this.searchQuery = '';
-        this.clientList = this.clientsProvider.getCLients();
+        this.clientList = this.clientsProvider.getClients();
     }
     RoutingPage.prototype.ionViewDidLoad = function () {
-        this.clientList = this.clientsProvider.getCLients();
+        this.clientList = this.clientsProvider.getClients();
         console.log(this.clientList);
         console.log('ionViewDidLoad RoutingPage');
     };
     // Liste wird nicht geupdatet.. .warum auch immer....
     RoutingPage.prototype.getItems = function (event) {
         var _this = this;
-        this.clientsProvider.getCLients();
+        this.clientsProvider.getClients();
         var val = event.target.value;
-        this.clientsProvider.getCLients().subscribe(function (client) {
+        this.clientsProvider.getClients().subscribe(function (client) {
             _this.clientList = client;
             console.log(client.title);
-            _this.clientList = _this.clientsProvider.getCLients()
+            _this.clientList = _this.clientsProvider.getClients()
                 .filter((function (client) {
                 if (val && val.trim() !== '') {
                     return client.title
@@ -21784,18 +21784,18 @@ var RoutingPage = /** @class */ (function () {
         modal.present();
     };
     RoutingPage.prototype.setClientDataAttributes = function (clientsProvider, doc, docId) {
-        clientsProvider.clientdata.title = doc.data().title;
-        console.log(clientsProvider.clientdata.title);
-        clientsProvider.clientdata.address = doc.data().address;
-        console.log(clientsProvider.clientdata.address);
-        clientsProvider.clientdata.id = doc.data().placeId;
-        console.log(clientsProvider.clientdata.id);
-        clientsProvider.clientdata.info = doc.data().extra_info;
-        console.log(clientsProvider.clientdata.info);
-        clientsProvider.clientdata.timestamp = doc.data().timestamp;
-        clientsProvider.clientdata.docId = docId;
-        clientsProvider.clientdata.intervall = doc.data().interval;
-        console.log(clientsProvider.clientdata.docId);
+        clientsProvider.clientData.title = doc.data().title;
+        console.log(clientsProvider.clientData.title);
+        clientsProvider.clientData.address = doc.data().address;
+        console.log(clientsProvider.clientData.address);
+        clientsProvider.clientData.id = doc.data().placeId;
+        console.log(clientsProvider.clientData.id);
+        clientsProvider.clientData.info = doc.data().extra_info;
+        console.log(clientsProvider.clientData.info);
+        clientsProvider.clientData.timestamp = doc.data().timestamp;
+        clientsProvider.clientData.docId = docId;
+        clientsProvider.clientData.interval = doc.data().interval;
+        console.log(clientsProvider.clientData.docId);
     };
     RoutingPage.prototype.delete = function (client) {
         this.clientsProvider.removeClient(client.id);

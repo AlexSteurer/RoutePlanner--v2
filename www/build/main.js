@@ -114,7 +114,7 @@ var ClientsProvider = /** @class */ (function () {
         var _this = this;
         this.afs = afs;
         this.afAuth = afAuth;
-        this.clientdata = {
+        this.clientData = {
             title: null,
             address: null,
             location: null,
@@ -123,26 +123,31 @@ var ClientsProvider = /** @class */ (function () {
             timestamp: null,
             bool: false,
             docId: null,
-            intervall: null,
+            interval: null,
         };
         this.afAuth.authState.subscribe(function (user) {
-            if (user)
+            if (user) {
                 _this.userId = user.uid;
+            }
             _this.clientCollection = _this.afs.collection(user.uid);
             /* this.clientList = this.clientCollection.valueChanges(); */
-            _this.clientList = _this.clientCollection.snapshotChanges().pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["map"])(function (actions) { return actions.map(function (a) {
+            _this.clientList = _this.clientCollection
+                .snapshotChanges()
+                .pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["map"])(function (actions) { return actions.map(function (a) {
                 var data = a.payload.doc.data();
                 var id = a.payload.doc.id;
                 return __assign({ id: id }, data);
             }); }));
         });
     }
+    //what to add and where?
     ClientsProvider.prototype.add = function (client) {
         return this.clientCollection.add(client);
     };
-    ClientsProvider.prototype.getCLients = function () {
+    ClientsProvider.prototype.getClients = function () {
         return this.clientList;
     };
+    //what to remove and where?
     ClientsProvider.prototype.removeClient = function (id) {
         var _this = this;
         this.afAuth.authState.subscribe(function (user) {
@@ -152,9 +157,9 @@ var ClientsProvider = /** @class */ (function () {
             return _this.afs.doc(user.uid + '/' + id).delete();
         });
     };
+    //what to update and where?
     ClientsProvider.prototype.updateClient = function (client, id) {
         var _this = this;
-        var uid;
         this.afAuth.authState.subscribe(function (user) {
             if (user)
                 _this.userId = user.uid;
@@ -166,9 +171,10 @@ var ClientsProvider = /** @class */ (function () {
     };
     ClientsProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_firestore__["a" /* AngularFirestore */], __WEBPACK_IMPORTED_MODULE_0_angularfire2_auth__["a" /* AngularFireAuth */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_angularfire2_firestore__["a" /* AngularFirestore */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angularfire2_firestore__["a" /* AngularFirestore */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _b || Object])
     ], ClientsProvider);
     return ClientsProvider;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=clients.js.map
@@ -303,8 +309,8 @@ var InfoPage = /** @class */ (function () {
     };
     InfoPage.prototype.resetTimeStamp = function () {
         var _this = this;
-        var inter = this.clientsProvider.clientdata.intervall;
-        var half = __WEBPACK_IMPORTED_MODULE_7_mathjs__["round"](this.clientsProvider.clientdata.intervall / 2);
+        var inter = this.clientsProvider.clientData.interval;
+        var half = __WEBPACK_IMPORTED_MODULE_7_mathjs__["round"](this.clientsProvider.clientData.interval / 2);
         var new_full = __WEBPACK_IMPORTED_MODULE_6_moment___default()(this.currentDate).add(inter, 'days').toDate();
         var new_half = __WEBPACK_IMPORTED_MODULE_6_moment___default()(this.currentDate).add(half, 'days').toDate();
         this.afAuth.authState.subscribe(function (user) {
@@ -312,7 +318,7 @@ var InfoPage = /** @class */ (function () {
                 _this.userId = user.uid;
             }
             return _this.afs
-                .doc(user.uid + '/' + _this.clientsProvider.clientdata.docId)
+                .doc(user.uid + '/' + _this.clientsProvider.clientData.docId)
                 .update({
                 time_chosen: new_full,
                 time_half: new_half,
@@ -339,7 +345,7 @@ var InfoPage = /** @class */ (function () {
                 _this.userId = user.uid;
             }
             return _this.afs
-                .doc(user.uid + '/' + _this.clientsProvider.clientdata.docId)
+                .doc(user.uid + '/' + _this.clientsProvider.clientData.docId)
                 .update({
                 extra_info: _this.infoText,
                 time_chosen: _this.new_date,
@@ -351,7 +357,7 @@ var InfoPage = /** @class */ (function () {
     };
     InfoPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["m" /* Component */])({
-            selector: 'page-info',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/info/info.html"*/'<!--\n  Generated template for the InfoPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n    <ion-navbar>\n        <ion-title>Client´s Page</ion-title>\n        <ion-buttons end>\n            <button ion-button icon-only (click)="closeModal()">\n                <ion-icon name="close"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n    <ion-card #textblock tappable>\n        <ion-item-sliding>\n            <ion-item>\n                <h2>{{this.clientsProvider.clientdata.title}}</h2>\n                <p>{{this.clientsProvider.clientdata.address}}</p>\n            </ion-item>\n        </ion-item-sliding>\n    </ion-card>\n\n\n    <ion-list>\n        <ion-list-header>\n            Choose an interval in days:\n        </ion-list-header>\n        <ion-badge item-start> {{this.clientsProvider.clientdata.intervall}}</ion-badge>\n        <ion-item>\n            <ion-range min="0" max="365" pin="true" [(ngModel)]="day_interval" color="primary">\n                <ion-label range-left>No intervall</ion-label>\n                <ion-label range-right>Day´s</ion-label>\n            </ion-range>\n        </ion-item>\n        <button ion-button (click)="resetTimeStamp()">Reset intervall</button>\n    </ion-list>\n\n\n    <ion-item tappable>\n    </ion-item>\n\n    <h2>Additional Client Information:</h2>\n    <p>{{this.clientsProvider.clientdata.info}}</p>\n    <ion-textarea [(ngModel)]="infoText"> {{infoText}}</ion-textarea>\n    <button ion-button small (click)="updateInformation(this.clientsProvider.clientdata.docId)">Update Client</button>\n    <p>{{this.clientsProvider.clientdata.id}}</p>\n\n    <!--  (click)="edit(client)"  -->\n</ion-content>'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/info/info.html"*/,
+            selector: 'page-info',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/info/info.html"*/'<!--\n  Generated template for the InfoPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n    <ion-navbar>\n        <ion-title>Client´s Page</ion-title>\n        <ion-buttons end>\n            <button ion-button icon-only (click)="closeModal()">\n                <ion-icon name="close"></ion-icon>\n            </button>\n        </ion-buttons>\n    </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n    <ion-card #textblock tappable>\n        <ion-item-sliding>\n            <ion-item>\n                <h2>{{this.clientsProvider.clientData.title}}</h2>\n                <p>{{this.clientsProvider.clientData.address}}</p>\n            </ion-item>\n        </ion-item-sliding>\n    </ion-card>\n\n\n    <ion-list>\n        <ion-list-header>\n            Choose an interval in days:\n        </ion-list-header>\n        <ion-badge item-start> {{this.clientsProvider.clientData.interval}}</ion-badge>\n        <ion-item>\n            <ion-range min="0" max="365" pin="true" [(ngModel)]="day_interval" color="primary">\n                <ion-label range-left>No intervall</ion-label>\n                <ion-label range-right>Day´s</ion-label>\n            </ion-range>\n        </ion-item>\n        <button ion-button (click)="resetTimeStamp()">Reset intervall</button>\n    </ion-list>\n\n\n    <ion-item tappable>\n    </ion-item>\n\n    <h2>Additional Client Information:</h2>\n    <p>{{this.clientsProvider.clientData.info}}</p>\n    <ion-textarea [(ngModel)]="infoText"> {{infoText}}</ion-textarea>\n    <button ion-button small (click)="updateInformation(this.clientsProvider.clientData.docId)">Update Client</button>\n    <p>{{this.clientsProvider.clientData.id}}</p>\n\n    <!--  (click)="edit(client)"  -->\n</ion-content>'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/info/info.html"*/,
         }),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5_angularfire2_firestore__["a" /* AngularFirestore */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5_angularfire2_firestore__["a" /* AngularFirestore */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["p" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["p" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular_navigation_view_controller__["a" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular_navigation_view_controller__["a" /* ViewController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__providers_clients_clients__["a" /* ClientsProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__providers_clients_clients__["a" /* ClientsProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* ModalController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* ModalController */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _g || Object])
     ], InfoPage);
