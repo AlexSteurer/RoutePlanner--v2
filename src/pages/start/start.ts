@@ -96,85 +96,93 @@ export class StartPage {
     };
 
     updateSearchResults() {
-        if (this.autocomplete.input == '') {
+        if (this.autocomplete.input === '') {
             this.autocompleteItems = [];
             return;
         }
+        this.showUserPlacePrediction();
+    }
+
+    private showUserPlacePrediction() {
         this.GoogleAutocomplete
             .getPlacePredictions({input: this.autocomplete.input},
                 (predictions, status) => {
                     this.autocompleteItems = [];
-                    if (predictions != null) {
-                        predictions.forEach((prediction) => {
-                            this.autocompleteItems.push(prediction);
-                        })
+                    if (predictions !== null) {
+                        predictions.forEach(
+                            prediction => this.autocompleteItems.push(prediction)
+                        )
                     }
                 });
     }
 
-
     selectSearchResult(item) {
 
         this.markers = [];
-        let lat = 0;
-        let lng = 0;
         this.autocompleteItems = [];
         this.geocoder
             .geocode({'placeId': item.place_id}, (results, status) => {
                 if (status === 'OK' && results[0]) {
-                    lat = results[0].geometry.location.lat();
-                    lng = results[0].geometry.location.lng();
-                    this.client.location = new firebase.firestore.GeoPoint(lat, lng);
-                    this.client.title = item.description;
-                    this.client.timestamp = moment(this.todayDateObj).toDate();
-                    let address;
-                    let id;
-                    for (let i = 0; i < results.length; i++) {
-                        address = results[i].formatted_address;
-                        id = results[i].place_id;
 
-                    }
-
-                    this.client.address = address;
-                    this.client.placeId = id;
+                    let address = this.setClientAttributes(results, item);
+                    let marker = this.createMarkerOnGoogleMaps(results, item);
                     this.saveClient();
-                    let image = {
-                        //url: item.icon,
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
-
-                    let marker = new google.maps.Marker({
-                        map: this.map,
-                        position: results[0].geometry.location,
-                        animation: google.maps.Animation.DROP,
-                        title: item.description,
-                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                    });
-
-                    let infoWindow = new google.maps.InfoWindow({
-                        content: '<div><strong>' + this.client.title + '</strong><br>' +
-                        'Address: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
-                        maxWidth: 300
-                    });
-
-                    google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
-                        document.getElementById('myid')
-                            .addEventListener('click', () => {
-                                this.markerLoad(this.client.placeId);
-                            });
-                    });
-
-                    google.maps.event
-                        .addListener(marker, 'click', () => infoWindow.open(this.map, this));
+                    let infoWindow = this.createClientInfoWindow(address);
+                    this.addListenerOnGoogleMaps(infoWindow, marker);
 
                     this.markers.push(marker);
                     this.map.setCenter(results[0].geometry.location);
                 }
             })
-    };
+    }
+
+    private addListenerOnGoogleMaps(infoWindow, marker) {
+        google.maps.event
+            .addListenerOnce(infoWindow, 'domready', () => {
+                document.getElementById('myid')
+                    .addEventListener('click', () => this.markerLoad(this.client.placeId));
+            });
+
+        google.maps.event
+            .addListener(marker, 'click', () => infoWindow.open(this.map, this));
+    }
+
+    private createClientInfoWindow(address) {
+        return new google.maps.InfoWindow({
+            content: '<div><strong>' + this.client.title + '</strong><br>' +
+            'Address: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
+            maxWidth: 300
+        });
+    }
+
+    private createMarkerOnGoogleMaps(results, item) {
+        return new google.maps.Marker({
+            map: this.map,
+            position: results[0].geometry.location,
+            animation: google.maps.Animation.DROP,
+            title: item.description,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        });
+    }
+
+    private setClientAttributes(results, item) {
+
+        let lat = results[0].geometry.location.lat();
+        let lng = results[0].geometry.location.lng();
+        this.client.location = new firebase.firestore.GeoPoint(lat, lng);
+        this.client.title = item.description;
+        this.client.timestamp = moment(this.todayDateObj).toDate();
+        let address;
+        let id;
+        for (let i = 0; i < results.length; i++) {
+            address = results[i].formatted_address;
+            id = results[i].place_id;
+
+        }
+        this.client.address = address;
+        this.client.placeId = id;
+        return address;
+    }
 
     pushButton() {
         let modalCtrl = this.modalCtrl;
@@ -197,9 +205,8 @@ export class StartPage {
                 this.db.collection(user.uid).where("placeId", "==", placeId)
                     .get()
                     .then(function (querySnapshot) {
-                        querySnapshot.forEach(function (doc) {
-                            this.setClientData(doc, lat, lng, clientsProvider);
-                        })
+                        querySnapshot
+                            .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider))
                     })
             }
         );
