@@ -21723,7 +21723,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var infowindow;
+var infoWindow;
 var service;
 var StartPage = /** @class */ (function () {
     function StartPage(navCtrl, afAuth, geolocation, navParams, alertCtrl, clientsProvider, toastCtrl, events, modalCtrl) {
@@ -21740,14 +21740,14 @@ var StartPage = /** @class */ (function () {
         this.client = {
             title: '',
             location: null,
-            adress: null,
+            address: null,
             placeId: null,
             extra_info: null,
             timestamp: null,
             docId: null,
             time_chosen: 1515283200,
             time_half: null,
-            intervall: null,
+            interval: null,
         };
         this.geocoder = new google.maps.Geocoder();
         this.db = __WEBPACK_IMPORTED_MODULE_6_firebase___default.a.firestore();
@@ -21763,6 +21763,12 @@ var StartPage = /** @class */ (function () {
         this.geocoder = new google.maps.Geocoder;
         this.markers = [];
     }
+    StartPage.prototype.ionViewDidLoad = function () {
+        this.loadMap();
+        //Alternative Searchbox von Google - aktuell nicht verwendet !
+        /*  let elem = <HTMLInputElement>document.getElementsByClassName('searchbar-input')[0];
+         this.autocomplete = new google.maps.places.SearchBox(elem); */
+    };
     StartPage.prototype.saveClient = function () {
         var _this = this;
         this.clientsProvider.add(this.client).then(function (res) {
@@ -21780,14 +21786,14 @@ var StartPage = /** @class */ (function () {
             this.autocompleteItems = [];
             return;
         }
-        this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input }, function (predictions, status) {
+        this.GoogleAutocomplete
+            .getPlacePredictions({ input: this.autocomplete.input }, function (predictions, status) {
             _this.autocompleteItems = [];
             if (predictions != null) {
                 predictions.forEach(function (prediction) {
                     _this.autocompleteItems.push(prediction);
                 });
             }
-            ;
         });
     };
     StartPage.prototype.selectSearchResult = function (item) {
@@ -21796,22 +21802,22 @@ var StartPage = /** @class */ (function () {
         var lat = 0;
         var lng = 0;
         this.autocompleteItems = [];
-        this.geocoder.geocode({ 'placeId': item.place_id }, function (results, status) {
+        this.geocoder
+            .geocode({ 'placeId': item.place_id }, function (results, status) {
             if (status === 'OK' && results[0]) {
                 lat = results[0].geometry.location.lat();
                 lng = results[0].geometry.location.lng();
                 _this.client.location = new __WEBPACK_IMPORTED_MODULE_6_firebase___default.a.firestore.GeoPoint(lat, lng);
                 _this.client.title = item.description;
                 _this.client.timestamp = __WEBPACK_IMPORTED_MODULE_7_moment___default()(_this.todayDateObj).toDate();
+                var address = void 0;
+                var id = void 0;
                 for (var i = 0; i < results.length; i++) {
-                    var adress = results[i].formatted_address;
-                    var id = results[i].place_id;
+                    address = results[i].formatted_address;
+                    id = results[i].place_id;
                 }
-                _this.client.adress = adress;
+                _this.client.address = address;
                 _this.client.placeId = id;
-                /* console.log(this.client.title);
-                console.log(this.client.adress); */
-                console.log(_this.client);
                 _this.saveClient();
                 var image = {
                     //url: item.icon,
@@ -21827,19 +21833,19 @@ var StartPage = /** @class */ (function () {
                     title: item.description,
                     icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
                 });
-                var infowindow = new google.maps.InfoWindow({
+                var infoWindow_1 = new google.maps.InfoWindow({
                     content: '<div><strong>' + _this.client.title + '</strong><br>' +
-                        'Adress: ' + adress + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
+                        'Address: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
                     maxWidth: 300
                 });
-                google.maps.event.addListenerOnce(infowindow, 'domready', function () {
-                    document.getElementById('myid').addEventListener('click', function () {
+                google.maps.event.addListenerOnce(infoWindow_1, 'domready', function () {
+                    document.getElementById('myid')
+                        .addEventListener('click', function () {
                         _this.markerLoad(_this.client.placeId);
                     });
                 });
-                google.maps.event.addListener(marker, 'click', function () {
-                    infowindow.open(this.map, this);
-                });
+                google.maps.event
+                    .addListener(marker, 'click', function () { return infoWindow_1.open(_this.map, _this); });
                 _this.markers.push(marker);
                 _this.map.setCenter(results[0].geometry.location);
             }
@@ -21859,108 +21865,113 @@ var StartPage = /** @class */ (function () {
         var lng;
         var clientsProvider = this.clientsProvider;
         this.afAuth.authState.subscribe(function (user) {
-            if (user)
+            if (user) {
                 _this.userId = user.uid;
+            }
             _this.db.collection(user.uid).where("placeId", "==", placeId)
                 .get()
                 .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
-                    doc.data().location._lat = lat;
-                    doc.data().location._lng = lng;
-                    clientsProvider.clientdata.info = doc.data().extra_info;
-                    //location = new firebase.firestore.GeoPoint(lat,lng);
-                    clientsProvider.clientdata.title = doc.data().title;
-                    console.log(clientsProvider.clientdata.title);
-                    clientsProvider.clientdata.address = doc.data().adress;
-                    console.log(clientsProvider.clientdata.address);
-                    clientsProvider.clientdata.id = doc.data().placeId;
-                    console.log(clientsProvider.clientdata.id);
-                    clientsProvider.clientdata.timestamp = doc.data().timestamp;
-                    clientsProvider.clientdata.bool = true;
+                    this.setClientData(doc, lat, lng, clientsProvider);
                 });
             });
         });
         this.pushButton();
     };
+    StartPage.prototype.setClientData = function (doc, lat, lng, clientsProvider) {
+        doc.data().location._lat = lat;
+        doc.data().location._lng = lng;
+        clientsProvider.clientdata.info = doc.data().extra_info;
+        //location = new firebase.firestore.GeoPoint(lat,lng);
+        clientsProvider.clientdata.title = doc.data().title;
+        console.log(clientsProvider.clientdata.title);
+        clientsProvider.clientdata.address = doc.data().address;
+        console.log(clientsProvider.clientdata.address);
+        clientsProvider.clientdata.id = doc.data().placeId;
+        console.log(clientsProvider.clientdata.id);
+        clientsProvider.clientdata.timestamp = doc.data().timestamp;
+        clientsProvider.clientdata.bool = true;
+    };
     /*createListMarkers(){
-     
-      this.afAuth.authState.subscribe(user =>{
-        if(user) this.userId =  user.uid
-      
-            
-            this.db.collection(user.uid).get().then(docs => {
-              docs.forEach((coord) => {
-              const title = coord.data().title;
-              const adress = coord.data().adress;
-              const placeId = coord.data().placeId;
-              const time_one = coord.data().time_chosen.seconds; // Unix seconds notwendig ??? - macht nur fehler
-              const time_half = coord.data().time_half.seconds;
-              console.log(moment());
-              console.log(moment.unix(time_one));
-              console.log(moment.unix(time_half))
-  
-              const time_stamp = coord.data().timestamp;
-              const extrainfo = '';
-              var marker_color = '';
-              
-              if (moment().isAfter(moment.unix(time_one))){
-                marker_color = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
-                
-  
-              }
-               if(moment().isAfter(moment.unix(time_half))){
-                 marker_color =  'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
-                
-              }
-               if(moment().isBefore(moment.unix(time_half))){
-                marker_color =  'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-               
-             }
-              const position = new google.maps.LatLng(coord.data().location._lat,coord.data().location._long);
-              const marker = new google.maps.Marker({
-                  position,
-                  map: this.map,
-                  icon: marker_color,
-                  title: title,
-                  animation: google.maps.Animation.DROP,
-                 });
-             
-                 
-                 
-                 var infowindow = new google.maps.InfoWindow({
-                  content : '<div><strong>' + title + '</strong><br>' +
-                  'Adress: ' + adress + '<br>' + '</div>'+'<button id="myid"><strong>Show Client Info !</strong></button>',
-                  maxWidth: 300
-                  });
-                  google.maps.event.addListenerOnce(infowindow, 'domready', () => {
-                  document.getElementById('myid').addEventListener('click', () => {
-                    this.markerLoad(placeId);
-                   
-                  
-                  });
-                  
-                  });
-  
-                 google.maps.event.addListener(marker,'click',function(){
-                  
-                  infowindow.open(this.map, this);
-                 })
-   
-             
-                })
-              })
-              
-  
-  
-              
-          });
-   
-    
-    }*/
+
+          this.afAuth.authState.subscribe(user =>{
+            if(user) this.userId =  user.uid
+
+
+                this.db.collection(user.uid).get().then(docs => {
+                  docs.forEach((coord) => {
+                  const title = coord.data().title;
+                  const adress = coord.data().adress;
+                  const placeId = coord.data().placeId;
+                  const time_one = coord.data().time_chosen.seconds; // Unix seconds notwendig ??? - macht nur fehler
+                  const time_half = coord.data().time_half.seconds;
+                  console.log(moment());
+                  console.log(moment.unix(time_one));
+                  console.log(moment.unix(time_half))
+
+                  const time_stamp = coord.data().timestamp;
+                  const extrainfo = '';
+                  var marker_color = '';
+
+                  if (moment().isAfter(moment.unix(time_one))){
+                    marker_color = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+
+
+                  }
+                   if(moment().isAfter(moment.unix(time_half))){
+                     marker_color =  'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+
+                  }
+                   if(moment().isBefore(moment.unix(time_half))){
+                    marker_color =  'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+
+                 }
+                  const position = new google.maps.LatLng(coord.data().location._lat,coord.data().location._long);
+                  const marker = new google.maps.Marker({
+                      position,
+                      map: this.map,
+                      icon: marker_color,
+                      title: title,
+                      animation: google.maps.Animation.DROP,
+                     });
+
+
+
+                     var infoWindow = new google.maps.InfoWindow({
+                      content : '<div><strong>' + title + '</strong><br>' +
+                      'Adress: ' + adress + '<br>' + '</div>'+'<button id="myid"><strong>Show Client Info !</strong></button>',
+                      maxWidth: 300
+                      });
+                      google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+                      document.getElementById('myid').addEventListener('click', () => {
+                        this.markerLoad(placeId);
+
+
+                      });
+
+                      });
+
+                     google.maps.event.addListener(marker,'click',function(){
+
+                      infoWindow.open(this.map, this);
+                     })
+
+
+                    })
+                  })
+
+
+
+
+              });
+
+
+        }*/
     StartPage.prototype.loadMap = function () {
         var _this = this;
         this.geolocation.getCurrentPosition().then(function (position) {
-            var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            var latLng = new google.maps
+                .LatLng(position.coords.latitude, position.coords.longitude);
             var mapOptions = {
                 center: latLng,
                 zoom: 12,
@@ -21972,102 +21983,7 @@ var StartPage = /** @class */ (function () {
                     position: google.maps.ControlPosition.RIGHT_BOTTOM
                 }
             };
-            var styledMapType = new google.maps.StyledMapType([
-                {
-                    "featureType": "administrative",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "water",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "transit",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "landscape",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.highway",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.local",
-                    "stylers": [
-                        {
-                            "visibility": "on"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.highway",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "visibility": "on"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "water",
-                    "stylers": [
-                        {
-                            "color": "#84afa3"
-                        },
-                        {
-                            "lightness": 52
-                        }
-                    ]
-                },
-                {
-                    "stylers": [
-                        {
-                            "saturation": -77
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road"
-                }
-            ], { name: 'Styled Map' });
+            var styledMapType = _this.createStyledMap();
             _this.map = new google.maps.Map(_this.mapElement.nativeElement, mapOptions);
             _this.map.mapTypes.set('styled_map', styledMapType);
             _this.map.setMapTypeId('styled_map');
@@ -22076,11 +21992,106 @@ var StartPage = /** @class */ (function () {
             console.log(err);
         });
     };
-    StartPage.prototype.ionViewDidLoad = function () {
-        this.loadMap();
-        //Alternative Searchbox von Google - aktuell nicht verwendet !
-        /*  let elem = <HTMLInputElement>document.getElementsByClassName('searchbar-input')[0];
-         this.autocomplete = new google.maps.places.SearchBox(elem); */
+    StartPage.prototype.createStyledMap = function () {
+        var styledMapType = new google.maps.StyledMapType([
+            {
+                "featureType": "administrative",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi",
+                "stylers": [
+                    {
+                        "visibility": "simplified"
+                    }
+                ]
+            },
+            {
+                "featureType": "road",
+                "stylers": [
+                    {
+                        "visibility": "simplified"
+                    }
+                ]
+            },
+            {
+                "featureType": "water",
+                "stylers": [
+                    {
+                        "visibility": "simplified"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit",
+                "stylers": [
+                    {
+                        "visibility": "simplified"
+                    }
+                ]
+            },
+            {
+                "featureType": "landscape",
+                "stylers": [
+                    {
+                        "visibility": "simplified"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.local",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    }
+                ]
+            },
+            {
+                "featureType": "water",
+                "stylers": [
+                    {
+                        "color": "#84afa3"
+                    },
+                    {
+                        "lightness": 52
+                    }
+                ]
+            },
+            {
+                "stylers": [
+                    {
+                        "saturation": -77
+                    }
+                ]
+            },
+            {
+                "featureType": "road"
+            }
+        ], {
+            name: 'Styled Map'
+        });
+        return styledMapType;
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["_8" /* ViewChild */])('map'),
@@ -22088,7 +22099,7 @@ var StartPage = /** @class */ (function () {
     ], StartPage.prototype, "mapElement", void 0);
     StartPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["m" /* Component */])({
-            selector: 'start-home',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/start/start.html"*/'<!--\n  Generated template for the StartPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header no-border>\n  \n    \n           \n        <ion-searchbar no-border [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>\n      \n      \n   \n    <ion-list  [hidden]="autocompleteItems.length == 0" >\n      <ion-item  text-wrap *ngFor="let item of autocompleteItems" >\n          \n           <button ion-button color="green" (tap)="selectSearchResult(item)">\n          <ion-icon name="add"> Add Client</ion-icon> \n        </button> \n        <p  #searchlist>  {{ item.description }} </p>\n     \n       \n        <!-- <ion-item-options side="right">\n            <button ion-button color="danger" >\n              <ion-icon name="trash"></ion-icon>\n            </button>\n          </ion-item-options> -->\n     \n      </ion-item>\n    </ion-list>\n  \n  \n</ion-header>\n  \n\n\n\n<ion-content >\n    <div #map id= "map"  ></div>\n    \n</ion-content>\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/start/start.html"*/,
+            selector: 'start-home',template:/*ion-inline-start:"/Users/fahri/RoutePlanner--v2/src/pages/start/start.html"*/'<!--\n  Generated template for the StartPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header no-border>\n    <ion-searchbar no-border [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()"\n                   placeholder="Search for a place"></ion-searchbar>\n\n    <ion-list [hidden]="autocompleteItems.length == 0">\n        <ion-item text-wrap *ngFor="let item of autocompleteItems">\n            <button ion-button color="green" (tap)="selectSearchResult(item)">\n                <ion-icon name="add"> Add Client</ion-icon>\n            </button>\n            <p #searchlist> {{ item.description }} </p>\n        </ion-item>\n    </ion-list>\n</ion-header>\n\n\n<ion-content>\n    <div #map id="map"></div>\n</ion-content>\n'/*ion-inline-end:"/Users/fahri/RoutePlanner--v2/src/pages/start/start.html"*/,
         }),
         __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["n" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["n" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["p" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["p" /* NavParams */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["a" /* AlertController */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_0__providers_clients_clients__["a" /* ClientsProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__providers_clients_clients__["a" /* ClientsProvider */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["s" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["s" /* ToastController */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["f" /* Events */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["f" /* Events */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["m" /* ModalController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["m" /* ModalController */]) === "function" && _k || Object])
     ], StartPage);
@@ -22102,7 +22113,7 @@ var StartPage = /** @class */ (function () {
     
 
    
-    infowindow = new google.maps.InfoWindow();
+    infoWindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(this.map);
     
     this.geolocation.getCurrentPosition().then((position) => {
@@ -22120,7 +22131,7 @@ var StartPage = /** @class */ (function () {
     });})
   }  */
 /*  createMarker(client) {
-  
+
   var image = {
     url: client.icon,
     size: new google.maps.Size(71, 71),
@@ -22137,10 +22148,10 @@ var StartPage = /** @class */ (function () {
   });
 
   google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(this.client.title);
-    infowindow.open(this.map, this);
-    infowindow.setContent('<div><strong>' + this.client.title + '</strong><br>' );
-  infowindow.open(this.map, this);
+    infoWindow.setContent(this.client.title);
+    infoWindow.open(this.map, this);
+    infoWindow.setContent('<div><strong>' + this.client.title + '</strong><br>' );
+  infoWindow.open(this.map, this);
 
   });
 }   */

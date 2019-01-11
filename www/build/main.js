@@ -344,7 +344,7 @@ var InfoPage = /** @class */ (function () {
                 extra_info: _this.infoText,
                 time_chosen: _this.new_date,
                 time_half: _this.day_interval_half,
-                intervall: _this.day_interval,
+                interval: _this.day_interval,
             });
         });
         this.closeModal();

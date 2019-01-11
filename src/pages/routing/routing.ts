@@ -92,7 +92,7 @@ export class RoutingPage {
     private setClientDataAttributes(clientsProvider, doc, docId) {
         clientsProvider.clientdata.title = doc.data().title;
         console.log(clientsProvider.clientdata.title);
-        clientsProvider.clientdata.address = doc.data().adress;
+        clientsProvider.clientdata.address = doc.data().address;
         console.log(clientsProvider.clientdata.address);
         clientsProvider.clientdata.id = doc.data().placeId;
         console.log(clientsProvider.clientdata.id);
@@ -100,7 +100,7 @@ export class RoutingPage {
         console.log(clientsProvider.clientdata.info);
         clientsProvider.clientdata.timestamp = doc.data().timestamp;
         clientsProvider.clientdata.docId = docId;
-        clientsProvider.clientdata.intervall = doc.data().intervall;
+        clientsProvider.clientdata.intervall = doc.data().interval;
         console.log(clientsProvider.clientdata.docId);
     }
 
