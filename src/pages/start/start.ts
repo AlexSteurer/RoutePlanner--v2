@@ -151,6 +151,11 @@ export class StartPage {
             .addListener(marker, 'click', () => infoWindow.open(this.map, this));
     }
 
+    /**
+     *
+     * @param address contains street, number and city
+     * @returns {google.maps.InfoWindow}
+     */
     private createClientInfoWindow(address) {
         return new google.maps.InfoWindow({
             content: '<div><strong>' + this.client.title + '</strong><br>' +
@@ -159,6 +164,12 @@ export class StartPage {
         });
     }
 
+    /**
+     * Creates a blue marker on Google Maps for selected item.
+     * @param results Google shows a list of found addresses for input
+     * @param item is the specific found address
+     * @returns {google.maps.Marker}
+     */
     private createMarkerOnGoogleMaps(results, item) {
         return new google.maps.Marker({
             map: this.map,
@@ -318,11 +329,14 @@ export class StartPage {
             this.map.mapTypes.set('styled_map', styledMapType);
             this.map.setMapTypeId('styled_map');
             // this.createListMarkers();
-        }, (err) => {
-            console.log(err);
-        });
+        }, err => console.log("Error load map: ", err.error));
     }
 
+    /**
+     *
+     * @param position
+     * @return mapOptions
+     */
     private createMapOptions(position) {
 
         let latLng = new google.maps
