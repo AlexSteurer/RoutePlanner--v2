@@ -37,10 +37,10 @@ export class StartPage {
         address: null,
         placeId: null,
         extra_info: null,
-        timestamp: null,
+        timestamp: undefined,
         docId: null,
         time_chosen: 1515283200,
-        time_half: null,
+        time_half: 1515283200,
         interval: null,
     };
 
@@ -244,81 +244,63 @@ export class StartPage {
         clientsProvider.clientData.bool = true;
     }
 
-    /*createListMarkers(){
+    createListMarkers() {
 
-          this.afAuth.authState.subscribe(user =>{
-            if(user) this.userId =  user.uid
+        this.afAuth.authState.subscribe(user => {
+            if (user) {
+                this.userId = user.uid;
+            }
 
+            this.db.collection(user.uid).get().then(docs => {
+                docs.forEach(coordinate => {
+                    const title = coordinate.data().title;
+                    const address = coordinate.data().adress;
+                    const placeId = coordinate.data().placeId;
+                    let marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+                    /*const time_one = coordinate.data().time_chosen.seconds; // Unix seconds notwendig ??? - macht nur fehler
+                    console.log("time_chosen: " + time_one);
+                    const time_half = coordinate.data().time_half.seconds;
+                    const time_stamp = coordinate.data().timestamp;
+                    const extrainfo = '';
 
-                this.db.collection(user.uid).get().then(docs => {
-                  docs.forEach((coord) => {
-                  const title = coord.data().title;
-                  const adress = coord.data().adress;
-                  const placeId = coord.data().placeId;
-                  const time_one = coord.data().time_chosen.seconds; // Unix seconds notwendig ??? - macht nur fehler
-                  const time_half = coord.data().time_half.seconds;
-                  console.log(moment());
-                  console.log(moment.unix(time_one));
-                  console.log(moment.unix(time_half))
+                     if (moment().isAfter(moment.unix(time_one))) {
+                         marker_color = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+                     }
+                     if (moment().isAfter(moment.unix(time_half))) {
+                         marker_color = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+                     }
+                     if (moment().isBefore(moment.unix(time_half))) {
+                         marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
 
-                  const time_stamp = coord.data().timestamp;
-                  const extrainfo = '';
-                  var marker_color = '';
-
-                  if (moment().isAfter(moment.unix(time_one))){
-                    marker_color = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
-
-
-                  }
-                   if(moment().isAfter(moment.unix(time_half))){
-                     marker_color =  'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
-
-                  }
-                   if(moment().isBefore(moment.unix(time_half))){
-                    marker_color =  'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-
-                 }
-                  const position = new google.maps.LatLng(coord.data().location._lat,coord.data().location._long);
-                  const marker = new google.maps.Marker({
-                      position,
-                      map: this.map,
-                      icon: marker_color,
-                      title: title,
-                      animation: google.maps.Animation.DROP,
-                     });
+                     }*/
+                    const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
+                    const marker = new google.maps.Marker({
+                        position,
+                        map: this.map,
+                        icon: marker_color,
+                        title: title,
+                        animation: google.maps.Animation.DROP,
+                    });
 
 
+                    let infoWindow = new google.maps.InfoWindow({
+                        content: '<div><strong>' + title + '</strong><br>' +
+                        'Adress: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
+                        maxWidth: 300
+                    });
+                    google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+                        document.getElementById('myid').addEventListener('click', () => {
+                            this.markerLoad(placeId);
+                        });
+                    });
 
-                     var infoWindow = new google.maps.InfoWindow({
-                      content : '<div><strong>' + title + '</strong><br>' +
-                      'Adress: ' + adress + '<br>' + '</div>'+'<button id="myid"><strong>Show Client Info !</strong></button>',
-                      maxWidth: 300
-                      });
-                      google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
-                      document.getElementById('myid').addEventListener('click', () => {
-                        this.markerLoad(placeId);
-
-
-                      });
-
-                      });
-
-                     google.maps.event.addListener(marker,'click',function(){
-
-                      infoWindow.open(this.map, this);
-                     })
-
-
+                    google.maps.event.addListener(marker, 'click', function () {
+                        infoWindow.open(this.map, this);
                     })
-                  })
-
-
-
-
-              });
-
-
-        }*/
+                })
+            })
+        });
+    }
 
 
     loadMap() {
@@ -328,7 +310,7 @@ export class StartPage {
             this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
             this.map.mapTypes.set('styled_map', styledMapType);
             this.map.setMapTypeId('styled_map');
-            // this.createListMarkers();
+            this.createListMarkers();
         }, err => console.log("Error load map: ", err.error));
     }
 
