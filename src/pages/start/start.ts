@@ -17,6 +17,7 @@ import *as geofirex from 'geofirex';
 import {GeoPoint, FieldPath} from '@firebase/firestore-types';
 import {ViewController} from 'ionic-angular/navigation/view-controller';
 import moment from 'moment';
+import {CustomAlertMessage} from "../../model/customAlertMessage";
 
 //what does google do?
 declare var google;
@@ -56,6 +57,7 @@ export class StartPage {
     zone: any;
     markers: any[];
     todayDateObj: Date;
+    private customAlertMsg: CustomAlertMessage;
 
     constructor(public navCtrl: NavController, private afAuth: AngularFireAuth,
                 public geolocation: Geolocation, public navParams: NavParams,
@@ -66,16 +68,14 @@ export class StartPage {
 
         this.todayDateObj = new Date();
         this.navCtrl = navCtrl;
-        events.subscribe('client:deleted', (client) => {
-            this.loadMap();
-            console.log('Welcome Markers');
-        });
+        events.subscribe('client:deleted', client => this.loadMap());
 
         this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
         this.autocomplete = {input: ''};
         this.autocompleteItems = [];
         this.geocoder = new google.maps.Geocoder;
         this.markers = [];
+        this.customAlertMsg = new CustomAlertMessage(this.alertCtrl);
     }
 
     ionViewDidLoad() {
@@ -130,21 +130,22 @@ export class StartPage {
 
                     let address = this.setClientAttributes(results, item);
                     let marker = this.createMarkerOnGoogleMaps(results, item);
+                    console.log('selectSearchResult results:', results);
                     this.saveClient();
-                    let infoWindow = this.createClientInfoWindow(address);
-                    this.addListenerOnGoogleMaps(infoWindow, marker);
+                    let infoWindow = this.createClientInfoWindow(address, this.client.title);
+                    this.addListenerOnGoogleMaps(infoWindow, marker, this.client.placeId);
                     this.markers.push(marker);
                     this.map.setCenter(results[0].geometry.location);
                 }
             })
     }
 
-    private addListenerOnGoogleMaps(infoWindow, marker) {
+    private addListenerOnGoogleMaps(infoWindow, marker, placeId) {
 
         google.maps.event
             .addListenerOnce(infoWindow, 'domready', () => {
                 document.getElementById('myid')
-                    .addEventListener('click', () => this.markerLoad(this.client.placeId));
+                    .addEventListener('click', () => this.markerLoad(placeId));
             });
 
         google.maps.event
@@ -156,9 +157,9 @@ export class StartPage {
      * @param address contains street, number and city
      * @returns {google.maps.InfoWindow}
      */
-    private createClientInfoWindow(address) {
+    private createClientInfoWindow(address, title) {
         return new google.maps.InfoWindow({
-            content: '<div><strong>' + this.client.title + '</strong><br>' +
+            content: '<div><strong>' + title + '</strong><br>' +
             'Address: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
             maxWidth: 300
         });
@@ -233,13 +234,9 @@ export class StartPage {
         doc.data().location._lat = lat;
         doc.data().location._lng = lng;
         clientsProvider.clientData.info = doc.data().extra_info;
-        //location = new firebase.firestore.GeoPoint(lat,lng);
         clientsProvider.clientData.title = doc.data().title;
-        console.log(clientsProvider.clientData.title);
         clientsProvider.clientData.address = doc.data().address;
-        console.log(clientsProvider.clientData.address);
         clientsProvider.clientData.id = doc.data().placeId;
-        console.log(clientsProvider.clientData.id);
         clientsProvider.clientData.timestamp = doc.data().timestamp;
         clientsProvider.clientData.bool = true;
     }
@@ -257,23 +254,10 @@ export class StartPage {
                     const address = coordinate.data().adress;
                     const placeId = coordinate.data().placeId;
                     let marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-                    /*const time_one = coordinate.data().time_chosen.seconds; // Unix seconds notwendig ??? - macht nur fehler
-                    console.log("time_chosen: " + time_one);
-                    const time_half = coordinate.data().time_half.seconds;
-                    const time_stamp = coordinate.data().timestamp;
-                    const extrainfo = '';
-
-                     if (moment().isAfter(moment.unix(time_one))) {
-                         marker_color = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
-                     }
-                     if (moment().isAfter(moment.unix(time_half))) {
-                         marker_color = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
-                     }
-                     if (moment().isBefore(moment.unix(time_half))) {
-                         marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-
-                     }*/
                     const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
+                    console.log("createListMarkers position: ", position);
+                    let infoWindow = this.createClientInfoWindow(address, title);
+
                     const marker = new google.maps.Marker({
                         position,
                         map: this.map,
@@ -281,22 +265,9 @@ export class StartPage {
                         title: title,
                         animation: google.maps.Animation.DROP,
                     });
+                   //const marker = this.createMarkerOnGoogleMaps(position, title);
 
-
-                    let infoWindow = new google.maps.InfoWindow({
-                        content: '<div><strong>' + title + '</strong><br>' +
-                        'Adress: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
-                        maxWidth: 300
-                    });
-                    google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
-                        document.getElementById('myid').addEventListener('click', () => {
-                            this.markerLoad(placeId);
-                        });
-                    });
-
-                    google.maps.event.addListener(marker, 'click', function () {
-                        infoWindow.open(this.map, this);
-                    })
+                    this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
                 })
             })
         });
@@ -311,7 +282,7 @@ export class StartPage {
             this.map.mapTypes.set('styled_map', styledMapType);
             this.map.setMapTypeId('styled_map');
             this.createListMarkers();
-        }, err => console.log("Error load map: ", err.error));
+        }, err => this.customAlertMsg.errorAlert(err.error));
     }
 
     /**
