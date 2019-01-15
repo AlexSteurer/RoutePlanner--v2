@@ -129,6 +129,7 @@ export class StartPage {
         let modal = modalCtrl.create(InfoPage);
         modal.present();
         this.loadMap();
+        //wkdajbfdlkyööpjhgbsakk
     };
 
     markerLoad(placeId) {
