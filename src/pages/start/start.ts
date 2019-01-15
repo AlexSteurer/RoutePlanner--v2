@@ -13,14 +13,12 @@ import {
 } from 'ionic-angular';
 import {Geolocation} from '@ionic-native/geolocation';
 import firebase from 'firebase';
-import *as geofirex from 'geofirex';
-import {GeoPoint, FieldPath} from '@firebase/firestore-types';
-import {ViewController} from 'ionic-angular/navigation/view-controller';
 import moment from 'moment';
 import {CustomAlertMessage} from "../../model/customAlertMessage";
+import {StyledMap} from "../../model/styledMap";
 
 //what does google do?
-declare var google;
+declare let google;
 let infoWindow: any;
 let service: any;
 
@@ -103,20 +101,6 @@ export class StartPage {
         this.showUserPlacePrediction();
     }
 
-    private showUserPlacePrediction() {
-        this.GoogleAutocomplete
-            .getPlacePredictions({
-                input: this.autocomplete.input
-            }, (predictions, status) => {
-                this.autocompleteItems = [];
-                if (predictions !== null) {
-                    predictions.forEach(
-                        prediction => this.autocompleteItems.push(prediction)
-                    )
-                }
-            });
-    }
-
     /**
      * Sets a marker on maps when user clicks on 'Add Client'.
      * @param item suggested address from search bar
@@ -140,6 +124,100 @@ export class StartPage {
             })
     }
 
+    pushButton() {
+        let modalCtrl = this.modalCtrl;
+        let modal = modalCtrl.create(InfoPage);
+        modal.present();
+        this.loadMap();
+    };
+
+    markerLoad(placeId) {
+
+        let lat;
+        let lng;
+        let clientsProvider = this.clientsProvider;
+
+        this.afAuth.authState.subscribe(user => {
+                if (user) {
+                    this.userId = user.uid;
+                }
+                this.db.collection(user.uid).where("placeId", "==", placeId)
+                    .get()
+                    .then(function (querySnapshot) {
+                        querySnapshot
+                            .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider))
+                    })
+            }
+        );
+        this.pushButton();
+    }
+
+    createListMarkers() {
+
+        this.afAuth.authState.subscribe(user => {
+            if (user) {
+                this.userId = user.uid;
+            }
+
+            this.db.collection(user.uid).get().then(docs => {
+                docs.forEach(coordinate => {
+                    const title = coordinate.data().title;
+                    const address = coordinate.data().adress;
+                    const placeId = coordinate.data().placeId;
+                    let marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+                    const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
+                    console.log("createListMarkers position: ", position);
+                    let infoWindow = this.createClientInfoWindow(address, title);
+
+                    const marker = new google.maps.Marker({
+                        position,
+                        map: this.map,
+                        icon: marker_color,
+                        title: title,
+                        animation: google.maps.Animation.DROP,
+                    });
+                    //const marker = this.createMarkerOnGoogleMaps(position, title);
+
+                    this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
+                })
+            })
+        });
+    }
+
+    loadMap() {
+        this.geolocation.getCurrentPosition().then(position => {
+            let mapOptions = this.createMapOptions(position);
+            let styledMapType = StyledMap.createStyledMap();
+            this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+            this.map.mapTypes.set('styled_map', styledMapType);
+            this.map.setMapTypeId('styled_map');
+            this.createListMarkers();
+        }, err => this.customAlertMsg.errorAlert(err.error));
+    }
+
+    /**
+     *
+     */
+    private showUserPlacePrediction() {
+        this.GoogleAutocomplete
+            .getPlacePredictions({
+                input: this.autocomplete.input
+            }, (predictions, status) => {
+                this.autocompleteItems = [];
+                if (predictions !== null) {
+                    predictions.forEach(
+                        prediction => this.autocompleteItems.push(prediction)
+                    )
+                }
+            });
+    }
+
+    /**
+     * Sets listener on google maps.
+     * @param infoWindow
+     * @param marker
+     * @param placeId
+     */
     private addListenerOnGoogleMaps(infoWindow, marker, placeId) {
 
         google.maps.event
@@ -160,7 +238,7 @@ export class StartPage {
     private createClientInfoWindow(address, title) {
         return new google.maps.InfoWindow({
             content: '<div><strong>' + title + '</strong><br>' +
-            'Address: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
+                'Address: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
             maxWidth: 300
         });
     }
@@ -200,36 +278,6 @@ export class StartPage {
         return address;
     }
 
-    pushButton() {
-        let modalCtrl = this.modalCtrl;
-        let modal = modalCtrl.create(InfoPage);
-        modal.present();
-        this.loadMap();
-    };
-
-
-    markerLoad(placeId) {
-
-        let lat;
-        let lng;
-        let clientsProvider = this.clientsProvider;
-
-        this.afAuth.authState.subscribe(user => {
-                if (user) {
-                    this.userId = user.uid;
-                }
-                this.db.collection(user.uid).where("placeId", "==", placeId)
-                    .get()
-                    .then(function (querySnapshot) {
-                        querySnapshot
-                            .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider))
-                    })
-            }
-        );
-        this.pushButton();
-    }
-
-
     private setClientData(doc, lat, lng, clientsProvider) {
         doc.data().location._lat = lat;
         doc.data().location._lng = lng;
@@ -239,50 +287,6 @@ export class StartPage {
         clientsProvider.clientData.id = doc.data().placeId;
         clientsProvider.clientData.timestamp = doc.data().timestamp;
         clientsProvider.clientData.bool = true;
-    }
-
-    createListMarkers() {
-
-        this.afAuth.authState.subscribe(user => {
-            if (user) {
-                this.userId = user.uid;
-            }
-
-            this.db.collection(user.uid).get().then(docs => {
-                docs.forEach(coordinate => {
-                    const title = coordinate.data().title;
-                    const address = coordinate.data().adress;
-                    const placeId = coordinate.data().placeId;
-                    let marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-                    const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
-                    console.log("createListMarkers position: ", position);
-                    let infoWindow = this.createClientInfoWindow(address, title);
-
-                    const marker = new google.maps.Marker({
-                        position,
-                        map: this.map,
-                        icon: marker_color,
-                        title: title,
-                        animation: google.maps.Animation.DROP,
-                    });
-                   //const marker = this.createMarkerOnGoogleMaps(position, title);
-
-                    this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
-                })
-            })
-        });
-    }
-
-
-    loadMap() {
-        this.geolocation.getCurrentPosition().then(position => {
-            let mapOptions = this.createMapOptions(position);
-            let styledMapType = this.createStyledMap();
-            this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-            this.map.mapTypes.set('styled_map', styledMapType);
-            this.map.setMapTypeId('styled_map');
-            this.createListMarkers();
-        }, err => this.customAlertMsg.errorAlert(err.error));
     }
 
     /**
@@ -309,109 +313,7 @@ export class StartPage {
         return mapOptions;
     }
 
-    private createStyledMap() {
-        let styledMapType = new google.maps.StyledMapType(
-            [
-                {
-                    "featureType": "administrative",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "water",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "transit",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "landscape",
-                    "stylers": [
-                        {
-                            "visibility": "simplified"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.highway",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.local",
-                    "stylers": [
-                        {
-                            "visibility": "on"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road.highway",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "visibility": "on"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "water",
-                    "stylers": [
-                        {
-                            "color": "#84afa3"
-                        },
-                        {
-                            "lightness": 52
-                        }
-                    ]
-                },
-                {
-                    "stylers": [
-                        {
-                            "saturation": -77
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road"
-                }
-            ],
-            {
-                name: 'Styled Map'
-            });
-        return styledMapType;
-    }
+
 }
 
 // Nearby Search - Currently not used in App !!!
