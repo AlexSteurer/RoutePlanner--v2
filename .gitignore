@@ -10,6 +10,7 @@
 *.tmp
 *.tmp.*
 log.txt
+.idea/
 
 # NPM (Node Package Manager) files
 npm-debug.log*
@@ -29,6 +30,7 @@ plugins/
 plugins/android.json
 plugins/ios.json
 www/
+www/index.html
 
 # Trash data
 $RECYCLE.BIN/
@@ -118,6 +120,7 @@ modules.xml
 
 # src files
 app.firebase.config.ts
+Project_Default.xml
 
 
 
