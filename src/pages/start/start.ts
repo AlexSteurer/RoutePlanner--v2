@@ -113,7 +113,7 @@ export class StartPage {
                 if (status === 'OK' && results[0]) {
 
                     let address = this.setClientAttributes(results, item);
-                    let marker = this.createMarkerOnGoogleMaps(results, item);
+                    let marker = this.createMarkerOnGoogleMaps2(results, item.description);
                     console.log('selectSearchResult results:', results);
                     this.saveClient();
                     let infoWindow = this.createClientInfoWindow(address, this.client.title);
@@ -164,20 +164,9 @@ export class StartPage {
                     const title = coordinate.data().title;
                     const address = coordinate.data().adress;
                     const placeId = coordinate.data().placeId;
-                    let marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
                     const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
-                    console.log("createListMarkers position: ", position);
-
-                    const marker = new google.maps.Marker({
-                        position,
-                        map: this.map,
-                        icon: marker_color,
-                        title: title,
-                        animation: google.maps.Animation.DROP,
-                    });
-                    //const marker = this.createMarkerOnGoogleMaps(position, title);
-
-                    let infoWindow = this.createClientInfoWindow(address, title);
+                    const marker = this.createMarkerOnGoogleMaps2(position, title);
+                    const infoWindow = this.createClientInfoWindow(address, title);
                     //this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
                     google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
                         document.getElementById('myid').addEventListener('click', () => {
@@ -191,6 +180,17 @@ export class StartPage {
                 })
             })
         });
+    }
+
+    private createMarkerOnGoogleMaps2(position, title) {
+        const marker = new google.maps.Marker({
+            position,
+            map: this.map,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+            title: title,
+            animation: google.maps.Animation.DROP,
+        });
+        return marker;
     }
 
     loadMap() {
@@ -258,7 +258,7 @@ export class StartPage {
      * @param item is the specific found address
      * @returns {google.maps.Marker}
      */
-    private createMarkerOnGoogleMaps(results, item) {
+    /*private createMarkerOnGoogleMaps(results, item) {
         return new google.maps.Marker({
             map: this.map,
             position: results[0].geometry.location,
@@ -266,7 +266,7 @@ export class StartPage {
             title: item.description,
             icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
         });
-    }
+    }*/
 
     private setClientAttributes(results, item) {
 
