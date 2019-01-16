@@ -113,8 +113,7 @@ export class StartPage {
                 if (status === 'OK' && results[0]) {
 
                     let address = this.setClientAttributes(results, item);
-                    let marker = this.createMarkerOnGoogleMaps2(results, item.description);
-                    console.log('selectSearchResult results:', results);
+                    let marker = this.createMarkerOnGoogleMaps(results, item.description);
                     this.saveClient();
                     let infoWindow = this.createClientInfoWindow(address, this.client.title);
                     this.addListenerOnGoogleMaps(infoWindow, marker, this.client.placeId);
@@ -153,44 +152,38 @@ export class StartPage {
     }
 
     createListMarkers() {
-
         this.afAuth.authState.subscribe(user => {
             if (user) {
                 this.userId = user.uid;
             }
-
             this.db.collection(user.uid).get().then(docs => {
                 docs.forEach(coordinate => {
                     const title = coordinate.data().title;
                     const address = coordinate.data().adress;
                     const placeId = coordinate.data().placeId;
                     const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
-                    const marker = this.createMarkerOnGoogleMaps2(position, title);
+                    const marker = this.createMarkerOnGoogleMaps(position, title);
                     const infoWindow = this.createClientInfoWindow(address, title);
-                    //this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
-                    google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
-                        document.getElementById('myid').addEventListener('click', () => {
-                            this.markerLoad(placeId);
-                        });
-                    });
-
-                    google.maps.event.addListener(marker, 'click', function () {
-                        infoWindow.open(this.map, this);
-                    })
+                    this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
                 })
             })
         });
     }
 
-    private createMarkerOnGoogleMaps2(position, title) {
-        const marker = new google.maps.Marker({
+    /**
+     * Sets a blue marker on Google Map
+     * @param position contains latitude and longitude
+     * @param title contains the name of the building/place
+     * @return google.maps.Marker
+     */
+    private createMarkerOnGoogleMaps(position, title) {
+        return new google.maps.Marker({
             position,
             map: this.map,
             icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
             title: title,
             animation: google.maps.Animation.DROP,
         });
-        return marker;
     }
 
     loadMap() {
@@ -204,9 +197,6 @@ export class StartPage {
         }, err => this.customAlertMsg.errorAlert(err.error));
     }
 
-    /**
-     *
-     */
     private showUserPlacePrediction() {
         this.GoogleAutocomplete
             .getPlacePredictions({
@@ -232,11 +222,15 @@ export class StartPage {
         google.maps.event
             .addListenerOnce(infoWindow, 'domready', () => {
                 document.getElementById('myid')
-                    .addEventListener('click', () => this.markerLoad(placeId));
+                    .addEventListener('click', () => {
+                        this.markerLoad(placeId);
+                    });
             });
 
         google.maps.event
-            .addListener(marker, 'click', () => infoWindow.open(this.map, this));
+            .addListener(marker, 'click', function () {
+                infoWindow.open(this.map, this);
+            })
     }
 
     /**
@@ -251,22 +245,6 @@ export class StartPage {
             maxWidth: 300
         });
     }
-
-    /**
-     * Creates a blue marker on Google Maps for selected item.
-     * @param results Google shows a list of found addresses for input
-     * @param item is the specific found address
-     * @returns {google.maps.Marker}
-     */
-    /*private createMarkerOnGoogleMaps(results, item) {
-        return new google.maps.Marker({
-            map: this.map,
-            position: results[0].geometry.location,
-            animation: google.maps.Animation.DROP,
-            title: item.description,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-        });
-    }*/
 
     private setClientAttributes(results, item) {
 
@@ -328,9 +306,6 @@ export class StartPage {
 // Nearby Search - Currently not used in App !!!
 /* 
   searchMarker() {
-    
-
-   
     infoWindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(this.map);
     
@@ -347,34 +322,19 @@ export class StartPage {
         }
       }
     });})
-  }  */
+  }
 
+    private createMarkerOnGoogleMaps2(results, item) {
+        return new google.maps.Marker({
+            map: this.map,
+            position: results[0].geometry.location,
+            animation: google.maps.Animation.DROP,
+            title: item.description,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        });
+    }
 
-/*  createMarker(client) {
-
-  var image = {
-    url: client.icon,
-    size: new google.maps.Size(71, 71),
-    origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(17, 34),
-    scaledSize: new google.maps.Size(25, 25)
-  };
-
-  var placeLoc = this.client.location;
-  var marker = new google.maps.Marker({
-    map: this.map,
-    position: placeLoc,
-    title: this.client.title
-  });
-
-  google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.setContent(this.client.title);
-    infoWindow.open(this.map, this);
-    infoWindow.setContent('<div><strong>' + this.client.title + '</strong><br>' );
-  infoWindow.open(this.map, this);
-
-  });
-}   */
+*/
 
 
  
