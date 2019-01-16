@@ -167,7 +167,6 @@ export class StartPage {
                     let marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
                     const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
                     console.log("createListMarkers position: ", position);
-                    let infoWindow = this.createClientInfoWindow(address, title);
 
                     const marker = new google.maps.Marker({
                         position,
@@ -178,7 +177,17 @@ export class StartPage {
                     });
                     //const marker = this.createMarkerOnGoogleMaps(position, title);
 
-                    this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
+                    let infoWindow = this.createClientInfoWindow(address, title);
+                    //this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
+                    google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+                        document.getElementById('myid').addEventListener('click', () => {
+                            this.markerLoad(placeId);
+                        });
+                    });
+
+                    google.maps.event.addListener(marker, 'click', function () {
+                        infoWindow.open(this.map, this);
+                    })
                 })
             })
         });
