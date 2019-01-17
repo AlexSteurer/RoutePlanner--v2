@@ -14,12 +14,14 @@ import {Geolocation} from '@ionic-native/geolocation';
 import {ClientsProvider} from '../providers/clients/clients';
 import {SuperTabsModule} from 'ionic2-super-tabs';
 import {FIREBASE_CONFIG} from "./app.firebase.config";
+import {TodoPage} from "../pages/todo/todo";
 
 
 @NgModule({
     declarations: [
         MyApp,
         InfoPage,
+        TodoPage
     ],
     imports: [
         BrowserModule,
@@ -33,6 +35,7 @@ import {FIREBASE_CONFIG} from "./app.firebase.config";
     entryComponents: [
         MyApp,
         InfoPage,
+        TodoPage
     ],
     providers: [
         StatusBar,

@@ -15,9 +15,8 @@ import firebase from 'firebase';
 import moment from 'moment';
 import {CustomAlertMessage} from "../../model/customAlertMessage";
 import {StyledMap} from "../../model/styledMap";
-import {TasksPage} from "../tasks/tasks";
+import {TodoPage} from "../todo/todo";
 
-//what does google do?
 declare let google;
 let infoWindow: any;
 let service: any;
@@ -129,7 +128,7 @@ export class StartPage {
             .then(val => console.log("redirectToTasks success"))
             .catch(err => console.log("redirectToTasks error: ", err.error));
         this.loadMap();*/
-        this.navCtrl.push(TasksPage);
+        this.navCtrl.push(TodoPage);
     }
 
     markerLoad(placeId) {
