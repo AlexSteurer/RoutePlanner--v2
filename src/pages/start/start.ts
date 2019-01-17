@@ -122,14 +122,15 @@ export class StartPage {
             })
     }
 
-    pushButton() {
-        let modalCtrl = this.modalCtrl;
+    redirectToTasks() {
+        /*let modalCtrl = this.modalCtrl;
         let modal = modalCtrl.create(TasksPage);
         modal.present()
-            .then(val => console.log("pushButton success"))
-            .catch(err => console.log("pushButton error: ", err.error));
-        this.loadMap();
-    };
+            .then(val => console.log("redirectToTasks success"))
+            .catch(err => console.log("redirectToTasks error: ", err.error));
+        this.loadMap();*/
+        this.navCtrl.push(TasksPage);
+    }
 
     markerLoad(placeId) {
         let lat;
@@ -141,14 +142,14 @@ export class StartPage {
                 }
                 this.db.collection(user.uid).where("placeId", "==", placeId)
                     .get()
-                    .then(function (querySnapshot) {
+                    .then( querySnapshot => {
                         querySnapshot
                             .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider))
                     })
-                    .catch(err => console.log("markerLoad error: ", err.error))
+                    .catch(err => console.log("markerLoad error: " + err.error))
             }
         );
-        this.pushButton();
+        this.redirectToTasks();
     }
 
     createListMarkers() {
