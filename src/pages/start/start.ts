@@ -145,6 +145,7 @@ export class StartPage {
                         querySnapshot
                             .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider))
                     })
+                    .catch(err => console.log("markerLoad error: ", err.error))
             }
         );
         this.pushButton();
