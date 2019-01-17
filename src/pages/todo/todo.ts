@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {IonicPage, NavController} from 'ionic-angular';
 
 /**
  * Generated class for the TodoPage page.
@@ -10,16 +10,28 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-todo',
-  templateUrl: 'todo.html',
+    selector: 'page-todo',
+    templateUrl: 'todo.html',
 })
 export class TodoPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+    @ViewChild('todoD') todoD;
+    private todoDate = '';
+    @ViewChild('descriptionView') descriptionView;
+    private description = '';
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TodoPage');
-  }
+    constructor(public navCtrl: NavController) {
+    }
 
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad TodoPage');
+    }
+
+    private clearUserInput() {
+
+    }
+
+    private saveUserInput() {
+
+    }
 }

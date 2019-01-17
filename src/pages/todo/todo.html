@@ -6,13 +6,30 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Your ToDo</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>Your ToDo</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+    <ion-list>
+
+        <ion-item>
+            <ion-label>Date:</ion-label>
+            <ion-input type="text" required #todoD [(ngModel)]="todoDate"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Note:</ion-label>
+            <ion-input type="text" required #descriptionView [(ngModel)]="description"></ion-input>
+        </ion-item>
+
+    </ion-list>
+
+    <button ion-button color="danger" type="reset" (click)="clearUserInput()">Delete</button>
+    <button ion-button id="saveButton" color="secondary" (click)="saveUserInput()">Save</button>
 
 </ion-content>
