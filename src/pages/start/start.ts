@@ -1,5 +1,4 @@
 import {ClientsProvider} from './../../providers/clients/clients';
-import {InfoPage} from './../info/info';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {
@@ -16,6 +15,7 @@ import firebase from 'firebase';
 import moment from 'moment';
 import {CustomAlertMessage} from "../../model/customAlertMessage";
 import {StyledMap} from "../../model/styledMap";
+import {TasksPage} from "../tasks/tasks";
 
 //what does google do?
 declare let google;
@@ -111,7 +111,6 @@ export class StartPage {
         this.geocoder
             .geocode({'placeId': item.place_id}, (results, status) => {
                 if (status === 'OK' && results[0]) {
-
                     let address = this.setClientAttributes(results, item);
                     let marker = this.createMarkerOnGoogleMaps(results, item.description);
                     this.saveClient();
@@ -125,17 +124,17 @@ export class StartPage {
 
     pushButton() {
         let modalCtrl = this.modalCtrl;
-        let modal = modalCtrl.create(InfoPage);
-        modal.present();
+        let modal = modalCtrl.create(TasksPage);
+        modal.present()
+            .then(val => console.log("pushButton success"))
+            .catch(err => console.log("pushButton error: ", err.error));
         this.loadMap();
     };
 
     markerLoad(placeId) {
-
         let lat;
         let lng;
         let clientsProvider = this.clientsProvider;
-
         this.afAuth.authState.subscribe(user => {
                 if (user) {
                     this.userId = user.uid;
@@ -240,8 +239,9 @@ export class StartPage {
      */
     private createClientInfoWindow(address, title) {
         return new google.maps.InfoWindow({
-            content: '<div><strong>' + title + '</strong><br>' +
-                'Address: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
+            content: '<div><strong>' + title + '</strong><br/>'
+                + 'Address: ' + address + '<br/>'
+                + '</div>' + '<a id="myid"><strong>Show Client Task !</strong></a>',
             maxWidth: 300
         });
     }
