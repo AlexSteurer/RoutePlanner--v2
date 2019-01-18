@@ -31,9 +31,9 @@ export class ClientsProvider {
         docId: null,
         interval: null,
         todo: {
-            title: '',
-            date: '',
-            descrition: ''
+            title: 'My Todo',
+            date: '12.01.2019',
+            description: 'Make dinner tonight.'
         }
     };
 

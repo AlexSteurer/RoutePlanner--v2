@@ -41,9 +41,9 @@ export class StartPage {
         time_half: 1515283200,
         interval: null,
         todo: {
-            title: '',
-            date: '',
-            description: ''
+            title: 'My Todo',
+            date: '12.01.2019',
+            description: 'Make dinner tonight.'
         }
     };
 
@@ -122,8 +122,9 @@ export class StartPage {
                     this.addListenerOnGoogleMaps(infoWindow, marker, this.client.placeId);
                     this.markers.push(marker);
                     this.map.setCenter(results[0].geometry.location);
+                    this.loadMap();
                 }
-            })
+            });
     }
 
     redirectToTasks() {
@@ -143,14 +144,13 @@ export class StartPage {
         this.afAuth.authState.subscribe(user => {
                 if (user) {
                     this.userId = user.uid;
-                    console.log("user id: ", user.uid)
                 }
                 this.db.collection(user.uid).where("placeId", "==", placeId)
                     .get()
-                    .then( querySnapshot => {
+                    .then(querySnapshot => {
                         querySnapshot
-                            .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider))
-                    })
+                                .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider));
+                        })
                     .catch(err => console.log("markerLoad error: " + err.error))
             }
         );
@@ -164,6 +164,7 @@ export class StartPage {
             }
             this.db.collection(user.uid).get().then(docs => {
                 docs.forEach(coordinate => {
+                    console.log('coordinate id:', coordinate.id);
                     const title = coordinate.data().title;
                     const address = coordinate.data().adress;
                     const placeId = coordinate.data().placeId;
