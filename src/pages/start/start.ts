@@ -40,6 +40,11 @@ export class StartPage {
         time_chosen: 1515283200,
         time_half: 1515283200,
         interval: null,
+        todo: {
+            title: '',
+            date: '',
+            description: ''
+        }
     };
 
     userId: any;
@@ -138,6 +143,7 @@ export class StartPage {
         this.afAuth.authState.subscribe(user => {
                 if (user) {
                     this.userId = user.uid;
+                    console.log("user id: ", user.uid)
                 }
                 this.db.collection(user.uid).where("placeId", "==", placeId)
                     .get()
