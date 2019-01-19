@@ -47,11 +47,11 @@ export class TodoPage {
             if (user) {
                 this.db.collection(user.uid).get().then(snapshot => {
                     snapshot.docs.forEach(document => {
-                        if (document.id === '2zrMlA6kryUSVj9a10Bs') {
+                        if (document.id === this.theDocId) {
                             console.log("the document: ", document.data());
                             this.title = document.data().todo.title;
                             this.todoDate = document.data().todo.date;
-                            this.description = document.data().todo.descrition;
+                            this.description = document.data().todo.description;
                         }
                     })
                 })
