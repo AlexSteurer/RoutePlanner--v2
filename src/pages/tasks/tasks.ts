@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Events, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {ClientsProvider} from "../../providers/clients/clients";
+import {AngularFireAuth} from "angularfire2/auth";
 
 /**
  * Generated class for the TasksPage page.
@@ -15,12 +17,40 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 })
 export class TasksPage {
 
-    constructor(public navCtrl: NavController, public navParams: NavParams) {
+    clientList: any;
+    private showTodoInfo: boolean = false; //Whatever you want to initialise it as
 
+
+    constructor(public navCtrl: NavController, public navParams: NavParams,
+                private clientsProvider: ClientsProvider,
+                private afAuth: AngularFireAuth, public events: Events) {
+
+        this.clientList = this.clientsProvider.getClients();
     }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad TasksPage');
     }
 
+    getItems(event: any) {
+        this.clientsProvider.getClients();
+
+        const val = event.target.value;
+
+        this.clientsProvider.getClients().subscribe(client => {
+            this.clientList = client;
+            this.clientList = this.clientsProvider.getClients()
+                .filter((function (client) {
+                    if (val && val.trim() !== '') {
+                        return client.todo.title
+                            .toLowerCase().indexOf(val.toLowerCase()) > -1;
+                    }
+                }))
+        })
+    }
+
+    private getTodoInfo(){
+        this.showTodoInfo = !this.showTodoInfo;
+        console.log("show info: ", this.showTodoInfo);
+    }
 }
