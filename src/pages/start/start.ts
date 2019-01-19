@@ -70,7 +70,7 @@ export class StartPage {
 
         this.todayDateObj = new Date();
         this.navCtrl = navCtrl;
-        events.subscribe('client:deleted', client => this.loadMap());
+        //events.subscribe('client:deleted', client => this.loadMap());
 
         this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
         this.autocomplete = {input: ''};
@@ -81,10 +81,10 @@ export class StartPage {
     }
 
     ionViewDidLoad() {
-        this.loadMap();
         //Alternative Searchbox von Google - aktuell nicht verwendet !
         /*  let elem = <HTMLInputElement>document.getElementsByClassName('searchbar-input')[0];
          this.autocomplete = new google.maps.places.SearchBox(elem); */
+        this.loadMap();
     }
 
     saveClient() {
@@ -144,14 +144,14 @@ export class StartPage {
         this.afAuth.authState.subscribe(user => {
                 if (user) {
                     this.userId = user.uid;
-                }
-                this.db.collection(user.uid).where("placeId", "==", placeId)
-                    .get()
-                    .then(querySnapshot => {
-                        querySnapshot
+                    this.db.collection(user.uid).where("placeId", "==", placeId)
+                        .get()
+                        .then(querySnapshot => {
+                            querySnapshot
                                 .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider));
                         })
-                    .catch(err => console.log("markerLoad error: " + err.error))
+                        .catch(err => console.log("markerLoad error: " + err.error))
+                }
             }
         );
         this.redirectToTasks();
@@ -161,19 +161,19 @@ export class StartPage {
         this.afAuth.authState.subscribe(user => {
             if (user) {
                 this.userId = user.uid;
-            }
-            this.db.collection(user.uid).get().then(docs => {
-                docs.forEach(coordinate => {
-                    console.log('coordinate id:', coordinate.id);
-                    const title = coordinate.data().title;
-                    const address = coordinate.data().adress;
-                    const placeId = coordinate.data().placeId;
-                    const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
-                    const marker = this.createMarkerOnGoogleMaps(position, title);
-                    const infoWindow = this.createClientInfoWindow(address, title);
-                    this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
+                this.db.collection(user.uid).get().then(docs => {
+                    docs.forEach(coordinate => {
+                        console.log('coordinate id:', coordinate.id);
+                        const title = coordinate.data().title;
+                        const address = coordinate.data().adress;
+                        const placeId = coordinate.data().placeId;
+                        const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
+                        const marker = this.createMarkerOnGoogleMaps(position, title);
+                        const infoWindow = this.createClientInfoWindow(address, title);
+                        this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
+                    })
                 })
-            })
+            }
         });
     }
 
