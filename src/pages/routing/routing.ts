@@ -8,8 +8,10 @@ import {IonicPage, NavController, NavParams, ModalController} from 'ionic-angula
 import {Events} from 'ionic-angular';
 import firebase from 'firebase';
 
+
 import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/filter'
+import {LaunchNavigator,LaunchNavigatorOptions} from "@ionic-native/launch-navigator";
 
 
 /**
@@ -30,14 +32,20 @@ export class RoutingPage {
     clients: Observable<any>;
     clientList: any;
     private userId: String;
+    start: string;
+    destination: string;
+    
 
 
     constructor(public navCtrl: NavController, public navParams: NavParams,
                 private clientsProvider: ClientsProvider,
                 private afAuth: AngularFireAuth, public events: Events,
-                public modalCtrl: ModalController) {
+                public modalCtrl: ModalController,
+                public launchNavigator: LaunchNavigator) {
 
         this.clientList = this.clientsProvider.getClients();
+        this.start = "";
+        this.destination = "Westminster, London, UK";
     }
 
     ionViewDidLoad() {
@@ -45,6 +53,37 @@ export class RoutingPage {
         console.log(this.clientList);
         console.log('ionViewDidLoad RoutingPage');
     }
+
+    //Takes the client´s id to search for the adress from the corresponding doc - then starts launchNavigator for nav.
+    navMe(docId) {
+        console.log(docId);
+        let launchNav = this.launchNavigator;
+        let options: LaunchNavigatorOptions = {
+            start: this.start
+        }
+
+        let db = firebase.firestore();
+        this.afAuth.authState.subscribe(user => {
+            if (user) {
+                this.userId = user.uid;
+            }
+            db.collection(user.uid).doc(docId)
+                .get()
+                .then(function (doc) {
+                    if (doc.exists) {
+                        let destination = doc.data().address;
+                        console.log(destination);
+                        launchNav.navigate(destination, options)
+                            .then(
+                                success => alert('Launched navigator'),
+                                error => alert('Error launching navigator: ' + error)
+                            );
+                    }
+                })
+        })
+    }
+
+
 
     // Liste wird nicht geupdatet.. .warum auch immer....
     getItems(event: any) {
@@ -100,7 +139,7 @@ export class RoutingPage {
         modal.present();
     }
 
-    private setClientDataAttributes(clientsProvider, doc, docId) {
+    /*private setClientDataAttributes(clientsProvider, doc, docId) {
         clientsProvider.clientData.title = doc.data().title;
         console.log(clientsProvider.clientData.title);
         clientsProvider.clientData.address = doc.data().address;
@@ -113,7 +152,7 @@ export class RoutingPage {
         clientsProvider.clientData.docId = docId;
         clientsProvider.clientData.interval = doc.data().interval;
         console.log(clientsProvider.clientData.docId);
-    }
+    }*/
 
     delete(client) {
         this.clientsProvider.removeClient(client.id);
@@ -121,4 +160,6 @@ export class RoutingPage {
         this.events.publish('client:deleted', client);
         
     };
+
+
 }

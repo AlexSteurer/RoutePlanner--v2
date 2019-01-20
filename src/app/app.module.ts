@@ -16,6 +16,7 @@ import {SuperTabsModule} from 'ionic2-super-tabs';
 import {FIREBASE_CONFIG} from "./app.firebase.config";
 import {TodoPage} from "../pages/todo/todo";
 import {ModalinfoPage} from "../pages/modalinfo/modalinfo";
+import {LaunchNavigator, LaunchNavigatorOptions} from "@ionic-native/launch-navigator";
 
 
 @NgModule({
@@ -49,6 +50,8 @@ import {ModalinfoPage} from "../pages/modalinfo/modalinfo";
         Geolocation,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         ClientsProvider,
+        LaunchNavigator,
+
 
     ]
 })
