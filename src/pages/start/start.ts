@@ -158,7 +158,7 @@ export class StartPage {
                 }
             }
         );
-        this.redirectToTasks();
+        this.redirectToInfoModal();
     }
 
     createListMarkers() {
@@ -234,7 +234,7 @@ export class StartPage {
             .addListenerOnce(infoWindow, 'domready', () => {
                 document.getElementById('myid')
                     .addEventListener('click', () => {
-                        this.markerLoad(placeId);
+                        this.redirectToTasks();
                     });
             });
 
@@ -315,6 +315,9 @@ export class StartPage {
     }
 
 
+    private redirectToInfoModal() {
+
+    }
 }
 
 // Nearby Search - Currently not used in App !!!
