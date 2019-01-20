@@ -1,0 +1,38 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Client´s Page</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="closeModal()">
+                <ion-icon name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-card #textblock tappable>
+        <ion-item-sliding>
+            <ion-item>
+                <h2>{{this.clientsProvider.clientData.title}}</h2>
+                <p>{{this.clientsProvider.clientData.address}}</p>
+            </ion-item>
+        </ion-item-sliding>
+    </ion-card>
+
+
+    <ion-list>
+        <ion-list-header>
+            Choosen time Interval:
+        </ion-list-header>
+        <ion-badge item-start> {{this.clientsProvider.clientData.interval}}</ion-badge>
+
+    </ion-list>
+
+
+    <h2>Additional Client Information:</h2>
+    <p>{{this.clientsProvider.clientData.info}}</p>
+
+
+    <!--  (click)="edit(client)"  -->
+</ion-content>
