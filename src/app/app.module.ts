@@ -3,7 +3,7 @@ import {HomePage} from './../pages/home/home'
 import {LoginPage} from './../pages/login/login';
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
-import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import {IonicApp, IonicErrorHandler, IonicModule, ModalController} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {MyApp} from './app.component';
@@ -15,13 +15,15 @@ import {ClientsProvider} from '../providers/clients/clients';
 import {SuperTabsModule} from 'ionic2-super-tabs';
 import {FIREBASE_CONFIG} from "./app.firebase.config";
 import {TodoPage} from "../pages/todo/todo";
+import {ModalinfoPage} from "../pages/modalinfo/modalinfo";
 
 
 @NgModule({
     declarations: [
         MyApp,
         InfoPage,
-        TodoPage
+        TodoPage,
+        ModalinfoPage,
     ],
     imports: [
         BrowserModule,
@@ -29,20 +31,25 @@ import {TodoPage} from "../pages/todo/todo";
         IonicModule.forRoot(MyApp),
         SuperTabsModule.forRoot(),
         AngularFirestoreModule,
-        AngularFireAuthModule
+        AngularFireAuthModule,
+
+
+
     ],
     bootstrap: [IonicApp],
     entryComponents: [
         MyApp,
         InfoPage,
-        TodoPage
+        TodoPage,
+        ModalinfoPage,
     ],
     providers: [
         StatusBar,
         SplashScreen,
         Geolocation,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
-        ClientsProvider
+        ClientsProvider,
+
     ]
 })
 export class AppModule {

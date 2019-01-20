@@ -1,14 +1,14 @@
 import {ClientsProvider} from './../../providers/clients/clients';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {Component, ViewChild, ElementRef} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {
+    AlertController,
+    Events,
     IonicPage,
+    ModalController,
     NavController,
     NavParams,
-    AlertController,
-    ToastController,
-    Events,
-    ModalController
+    ToastController
 } from 'ionic-angular';
 import {Geolocation} from '@ionic-native/geolocation';
 import firebase from 'firebase';
@@ -16,6 +16,7 @@ import moment from 'moment';
 import {CustomAlertMessage} from "../../model/customAlertMessage";
 import {StyledMap} from "../../model/styledMap";
 import {TodoPage} from "../todo/todo";
+import {ModalinfoPage} from "../modalinfo/modalinfo";
 
 declare let google;
 let infoWindow: any;
@@ -67,7 +68,7 @@ export class StartPage {
                 private alertCtrl: AlertController,
                 public clientsProvider: ClientsProvider,
                 private toastCtrl: ToastController,
-                public events: Events, public modalCtrl: ModalController) {
+                public events: Events, public modalCtrl: ModalController,) {
 
         this.todayDateObj = new Date();
         this.navCtrl = navCtrl;
@@ -157,9 +158,9 @@ export class StartPage {
                         .catch(err => console.log("markerLoad error: " + err.error))
                 }
             }
-        );
+        )
         this.redirectToInfoModal();
-    }
+    };
 
     createListMarkers() {
         this.afAuth.authState.subscribe(user => {
@@ -235,6 +236,10 @@ export class StartPage {
                 document.getElementById('myid')
                     .addEventListener('click', () => {
                         this.redirectToTasks();
+                    })
+                document.getElementById('modalid')
+                    .addEventListener('click', () => {
+                        this.markerLoad(placeId);
                     });
             });
 
@@ -255,7 +260,8 @@ export class StartPage {
         return new google.maps.InfoWindow({
             content: '<div><strong>' + title + '</strong><br/>'
                 + 'Address: ' + address + '<br/>'
-                + '</div>' + '<a id="myid"><strong>Show Client Task !</strong></a>',
+                + '</div>' + '<a id="myid"><strong>Show Client Task </strong></a>'
+            +'<hr/>'+'</div>' + '<a id="modalid"><strong>Show Client Info </strong></a>',
             maxWidth: 300
         });
     }
@@ -311,11 +317,17 @@ export class StartPage {
                 position: google.maps.ControlPosition.RIGHT_BOTTOM
             }
         };
-        return mapOptions;
+       return mapOptions
     }
 
 
-    private redirectToInfoModal() {
+    redirectToInfoModal() {
+
+        //this.navCtrl.push(ModalinfoPage);
+        let modal = this.modalCtrl.create(ModalinfoPage);
+        modal.present()
+           .then(val => console.log("ModalInfoWindow success"))
+           .catch(err => console.log("ModalInfoWindow error: ", err.error));
 
     }
 }
