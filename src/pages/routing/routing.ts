@@ -49,7 +49,6 @@ export class RoutingPage {
     // Liste wird nicht geupdatet.. .warum auch immer....
     getItems(event: any) {
         this.clientsProvider.getClients();
-
         const val = event.target.value;
 
         this.clientsProvider.getClients().subscribe(client => {
