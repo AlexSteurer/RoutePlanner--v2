@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {IonicPage, NavController} from 'ionic-angular';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ClientsProvider} from "../../providers/clients/clients";
 import {AngularFireAuth} from "angularfire2/auth";
 import firebase from 'firebase';
@@ -28,9 +28,12 @@ export class TodoPage {
     clientList: any;
     db = firebase.firestore();
     myDoc: any;
+    private theDocId = '';
+    private userUID = '';
 
 
-    constructor(public navCtrl: NavController, private afAuth: AngularFireAuth,
+    constructor(public navCtrl: NavController, public navParams: NavParams,
+                private afAuth: AngularFireAuth,
                 private clientsProvider: ClientsProvider) {
 
         this.clientList = this.clientsProvider.getClients();
@@ -38,24 +41,25 @@ export class TodoPage {
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad TodoPage');
+        this.theDocId = this.navParams.get('theDocId');
+        console.log('ionViewDidLoad TodoPage docId:', this.theDocId);
         this.clientList = this.clientsProvider.getClients();
+        //Fetching the clientTodo attribute from Firestore Document
         this.afAuth.authState.subscribe(user => {
             if (user) {
-                console.log("user id: ", user.uid);
+                this.userUID = user.uid;
+                this.db.collection(user.uid).get().then(snapshot => {
+                    snapshot.docs.forEach(document => {
+                        if (document.id === this.theDocId) {
+                            this.title = document.data().todo.title;
+                            this.todoDate = document.data().todo.date;
+                            this.description = document.data().todo.description;
+                        }
+                    })
+                });
             }
-            this.db.collection(user.uid).get().then(snapshot => {
-                snapshot.docs.forEach(document => {
-                    if (document.id === '2zrMlA6kryUSVj9a10Bs') {
-                        console.log("the document: ", document.data());
-                        this.title = document.data().todo.title;
-                        this.todoDate = document.data().todo.date;
-                        this.description = document.data().todo.descrition;
-                    }
-                })
-            })
-            //this.myDoc = this.db.collection(user.uid).doc("2zrMlA6kryUSVj9a10Bs");
-            //this.myDoc = this.db.collection(user.uid).get();
-            //console.log("myDoc: ", this.myDoc["2zrMlA6kryUSVj9a10Bs"]);
+            /*const test = this.db.collection(user.uid).doc(this.theDocId);
+            console.log('ionViewDidLoad TodoPage docId:', test);*/
         });
     }
 
@@ -85,4 +89,25 @@ export class TodoPage {
     private saveUserInput() {
 
     }
+
+    //add document to Firestore
+    /*private addToFireSTore(){
+        this.db.collection(this.userUID).add({
+            title: '',
+            location: null,
+            address: null,
+            placeId: null,
+            extra_info: null,
+            timestamp: undefined,
+            docId: null,
+            time_chosen: 1515283200,
+            time_half: 1515283200,
+            interval: null,
+            todo: {
+                title: 'My Todo',
+                date: '12.01.2019',
+                description: 'Make dinner tonight.'
+            }
+        });
+    }*/
 }

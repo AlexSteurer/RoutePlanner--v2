@@ -60,6 +60,7 @@ export class StartPage {
     markers: any[];
     todayDateObj: Date;
     private customAlertMsg: CustomAlertMessage;
+    static theDocId = '';
 
     constructor(public navCtrl: NavController, private afAuth: AngularFireAuth,
                 public geolocation: Geolocation, public navParams: NavParams,
@@ -70,7 +71,7 @@ export class StartPage {
 
         this.todayDateObj = new Date();
         this.navCtrl = navCtrl;
-        events.subscribe('client:deleted', client => this.loadMap());
+        //events.subscribe('client:deleted', client => this.loadMap());
 
         this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
         this.autocomplete = {input: ''};
@@ -81,10 +82,10 @@ export class StartPage {
     }
 
     ionViewDidLoad() {
-        this.loadMap();
         //Alternative Searchbox von Google - aktuell nicht verwendet !
         /*  let elem = <HTMLInputElement>document.getElementsByClassName('searchbar-input')[0];
          this.autocomplete = new google.maps.places.SearchBox(elem); */
+        this.loadMap();
     }
 
     saveClient() {
@@ -119,7 +120,8 @@ export class StartPage {
                     let marker = this.createMarkerOnGoogleMaps(results, item.description);
                     this.saveClient();
                     let infoWindow = this.createClientInfoWindow(address, this.client.title);
-                    this.addListenerOnGoogleMaps(infoWindow, marker, this.client.placeId);
+                    console.log("doc id: ", item.id);
+                    this.addListenerOnGoogleMaps(infoWindow, marker, this.client.placeId, item.id);
                     this.markers.push(marker);
                     this.map.setCenter(results[0].geometry.location);
                     this.loadMap();
@@ -134,7 +136,9 @@ export class StartPage {
             .then(val => console.log("redirectToTasks success"))
             .catch(err => console.log("redirectToTasks error: ", err.error));
         this.loadMap();*/
-        this.navCtrl.push(TodoPage);
+        this.navCtrl.push(TodoPage, {
+            theDocId: StartPage.theDocId
+        });
     }
 
     markerLoad(placeId) {
@@ -144,14 +148,14 @@ export class StartPage {
         this.afAuth.authState.subscribe(user => {
                 if (user) {
                     this.userId = user.uid;
-                }
-                this.db.collection(user.uid).where("placeId", "==", placeId)
-                    .get()
-                    .then(querySnapshot => {
-                        querySnapshot
+                    this.db.collection(user.uid).where("placeId", "==", placeId)
+                        .get()
+                        .then(querySnapshot => {
+                            querySnapshot
                                 .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider));
                         })
-                    .catch(err => console.log("markerLoad error: " + err.error))
+                        .catch(err => console.log("markerLoad error: " + err.error))
+                }
             }
         );
         this.redirectToTasks();
@@ -161,19 +165,19 @@ export class StartPage {
         this.afAuth.authState.subscribe(user => {
             if (user) {
                 this.userId = user.uid;
-            }
-            this.db.collection(user.uid).get().then(docs => {
-                docs.forEach(coordinate => {
-                    console.log('coordinate id:', coordinate.id);
-                    const title = coordinate.data().title;
-                    const address = coordinate.data().adress;
-                    const placeId = coordinate.data().placeId;
-                    const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
-                    const marker = this.createMarkerOnGoogleMaps(position, title);
-                    const infoWindow = this.createClientInfoWindow(address, title);
-                    this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
+                this.db.collection(user.uid).get().then(docs => {
+                    docs.forEach(coordinate => {
+                        console.log('coordinate id:', coordinate.id);
+                        const title = coordinate.data().title;
+                        const address = coordinate.data().adress;
+                        const placeId = coordinate.data().placeId;
+                        const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
+                        const marker = this.createMarkerOnGoogleMaps(position, title);
+                        const infoWindow = this.createClientInfoWindow(address, title);
+                        this.addListenerOnGoogleMaps(infoWindow, marker, placeId, coordinate.id);
+                    })
                 })
-            })
+            }
         });
     }
 
@@ -224,7 +228,7 @@ export class StartPage {
      * @param marker
      * @param placeId
      */
-    private addListenerOnGoogleMaps(infoWindow, marker, placeId) {
+    private addListenerOnGoogleMaps(infoWindow, marker, placeId, documentId) {
 
         google.maps.event
             .addListenerOnce(infoWindow, 'domready', () => {
@@ -237,7 +241,9 @@ export class StartPage {
         google.maps.event
             .addListener(marker, 'click', function () {
                 infoWindow.open(this.map, this);
-            })
+                StartPage.theDocId = documentId;
+                console.log("the doc id: ", StartPage.theDocId);
+            });
     }
 
     /**
