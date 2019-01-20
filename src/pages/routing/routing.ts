@@ -80,7 +80,19 @@ export class RoutingPage {
                 .get()
                 .then(function (doc) {
                     if (doc.exists) {
-                        this.setClientDataAttributes(clientsProvider, doc, docId);
+                       // this.setClientDataAttributes(clientsProvider, doc, docId);
+                        clientsProvider.clientData.title = doc.data().title;
+                        console.log(clientsProvider.clientData.title);
+                        clientsProvider.clientData.address = doc.data().address;
+                        console.log(clientsProvider.clientData.address);
+                        clientsProvider.clientData.id = doc.data().placeId;
+                        console.log(clientsProvider.clientData.id);
+                        clientsProvider.clientData.info = doc.data().extra_info;
+                        console.log(clientsProvider.clientData.info);
+                        clientsProvider.clientData.timestamp = doc.data().timestamp;
+                        clientsProvider.clientData.docId = docId;
+                        clientsProvider.clientData.interval = doc.data().interval;
+                        console.log(clientsProvider.clientData.docId);
                     }
                 })
         });
@@ -107,5 +119,6 @@ export class RoutingPage {
         this.clientsProvider.removeClient(client.id);
         console.log('Client deleted!');
         this.events.publish('client:deleted', client);
+        
     };
 }

@@ -96,6 +96,7 @@ export class StartPage {
                 duration: 2000
             });
             toast.present();
+            this.loadMap();
         })
     }
 
@@ -293,6 +294,7 @@ export class StartPage {
         clientsProvider.clientData.address = doc.data().address;
         clientsProvider.clientData.id = doc.data().placeId;
         clientsProvider.clientData.timestamp = doc.data().timestamp;
+        clientsProvider.clientData.interval = doc.data().interval;
         clientsProvider.clientData.bool = true;
     }
 

@@ -40,6 +40,7 @@ export class ModalinfoPage {
     timestamp: null,
     bool: false,
     docId: String,
+    interval: null,
   };
 
   constructor(private afs: AngularFirestore, public navCtrl: NavController,
