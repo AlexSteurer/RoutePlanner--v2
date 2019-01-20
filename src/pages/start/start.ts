@@ -1,5 +1,4 @@
 import {ClientsProvider} from './../../providers/clients/clients';
-import {InfoPage} from './../info/info';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {
@@ -16,8 +15,8 @@ import firebase from 'firebase';
 import moment from 'moment';
 import {CustomAlertMessage} from "../../model/customAlertMessage";
 import {StyledMap} from "../../model/styledMap";
+import {TodoPage} from "../todo/todo";
 
-//what does google do?
 declare let google;
 let infoWindow: any;
 let service: any;
@@ -41,6 +40,11 @@ export class StartPage {
         time_chosen: 1515283200,
         time_half: 1515283200,
         interval: null,
+        todo: {
+            title: 'My Todo',
+            date: '12.01.2019',
+            description: 'Make dinner tonight.'
+        }
     };
 
     userId: any;
@@ -111,77 +115,81 @@ export class StartPage {
         this.geocoder
             .geocode({'placeId': item.place_id}, (results, status) => {
                 if (status === 'OK' && results[0]) {
-
                     let address = this.setClientAttributes(results, item);
-                    let marker = this.createMarkerOnGoogleMaps(results, item);
-                    console.log('selectSearchResult results:', results);
+                    let marker = this.createMarkerOnGoogleMaps(results, item.description);
                     this.saveClient();
                     let infoWindow = this.createClientInfoWindow(address, this.client.title);
                     this.addListenerOnGoogleMaps(infoWindow, marker, this.client.placeId);
                     this.markers.push(marker);
                     this.map.setCenter(results[0].geometry.location);
+                    this.loadMap();
                 }
-            })
+            });
     }
 
-    pushButton() {
-        let modalCtrl = this.modalCtrl;
-        let modal = modalCtrl.create(InfoPage);
-        modal.present();
-        this.loadMap();
-        //wkdajbfdlkyööpjhgbsakk
-    };
+    redirectToTasks() {
+        /*let modalCtrl = this.modalCtrl;
+        let modal = modalCtrl.create(TasksPage);
+        modal.present()
+            .then(val => console.log("redirectToTasks success"))
+            .catch(err => console.log("redirectToTasks error: ", err.error));
+        this.loadMap();*/
+        this.navCtrl.push(TodoPage);
+    }
 
     markerLoad(placeId) {
-
         let lat;
         let lng;
         let clientsProvider = this.clientsProvider;
-
         this.afAuth.authState.subscribe(user => {
                 if (user) {
                     this.userId = user.uid;
                 }
                 this.db.collection(user.uid).where("placeId", "==", placeId)
                     .get()
-                    .then(function (querySnapshot) {
+                    .then(querySnapshot => {
                         querySnapshot
-                            .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider))
-                    })
+                                .forEach(doc => this.setClientData(doc, lat, lng, clientsProvider));
+                        })
+                    .catch(err => console.log("markerLoad error: " + err.error))
             }
         );
-        this.pushButton();
+        this.redirectToTasks();
     }
 
     createListMarkers() {
-
         this.afAuth.authState.subscribe(user => {
             if (user) {
                 this.userId = user.uid;
             }
-
             this.db.collection(user.uid).get().then(docs => {
                 docs.forEach(coordinate => {
+                    console.log('coordinate id:', coordinate.id);
                     const title = coordinate.data().title;
                     const address = coordinate.data().adress;
                     const placeId = coordinate.data().placeId;
-                    let marker_color = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
                     const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
-                    console.log("createListMarkers position: ", position);
-                    let infoWindow = this.createClientInfoWindow(address, title);
-
-                    const marker = new google.maps.Marker({
-                        position,
-                        map: this.map,
-                        icon: marker_color,
-                        title: title,
-                        animation: google.maps.Animation.DROP,
-                    });
-                    //const marker = this.createMarkerOnGoogleMaps(position, title);
-
+                    const marker = this.createMarkerOnGoogleMaps(position, title);
+                    const infoWindow = this.createClientInfoWindow(address, title);
                     this.addListenerOnGoogleMaps(infoWindow, marker, placeId);
                 })
             })
+        });
+    }
+
+    /**
+     * Sets a blue marker on Google Map
+     * @param position contains latitude and longitude
+     * @param title contains the name of the building/place
+     * @return google.maps.Marker
+     */
+    private createMarkerOnGoogleMaps(position, title) {
+        return new google.maps.Marker({
+            position,
+            map: this.map,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+            title: title,
+            animation: google.maps.Animation.DROP,
         });
     }
 
@@ -196,9 +204,6 @@ export class StartPage {
         }, err => this.customAlertMsg.errorAlert(err.error));
     }
 
-    /**
-     *
-     */
     private showUserPlacePrediction() {
         this.GoogleAutocomplete
             .getPlacePredictions({
@@ -224,11 +229,15 @@ export class StartPage {
         google.maps.event
             .addListenerOnce(infoWindow, 'domready', () => {
                 document.getElementById('myid')
-                    .addEventListener('click', () => this.markerLoad(placeId));
+                    .addEventListener('click', () => {
+                        this.markerLoad(placeId);
+                    });
             });
 
         google.maps.event
-            .addListener(marker, 'click', () => infoWindow.open(this.map, this));
+            .addListener(marker, 'click', function () {
+                infoWindow.open(this.map, this);
+            })
     }
 
     /**
@@ -238,25 +247,10 @@ export class StartPage {
      */
     private createClientInfoWindow(address, title) {
         return new google.maps.InfoWindow({
-            content: '<div><strong>' + title + '</strong><br>' +
-                'Address: ' + address + '<br>' + '</div>' + '<button id="myid"><strong>Show Client Info !</strong></button>',
+            content: '<div><strong>' + title + '</strong><br/>'
+                + 'Address: ' + address + '<br/>'
+                + '</div>' + '<a id="myid"><strong>Show Client Task !</strong></a>',
             maxWidth: 300
-        });
-    }
-
-    /**
-     * Creates a blue marker on Google Maps for selected item.
-     * @param results Google shows a list of found addresses for input
-     * @param item is the specific found address
-     * @returns {google.maps.Marker}
-     */
-    private createMarkerOnGoogleMaps(results, item) {
-        return new google.maps.Marker({
-            map: this.map,
-            position: results[0].geometry.location,
-            animation: google.maps.Animation.DROP,
-            title: item.description,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
         });
     }
 
@@ -320,9 +314,6 @@ export class StartPage {
 // Nearby Search - Currently not used in App !!!
 /* 
   searchMarker() {
-    
-
-   
     infoWindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(this.map);
     
@@ -339,34 +330,19 @@ export class StartPage {
         }
       }
     });})
-  }  */
+  }
 
+    private createMarkerOnGoogleMaps2(results, item) {
+        return new google.maps.Marker({
+            map: this.map,
+            position: results[0].geometry.location,
+            animation: google.maps.Animation.DROP,
+            title: item.description,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+        });
+    }
 
-/*  createMarker(client) {
-
-  var image = {
-    url: client.icon,
-    size: new google.maps.Size(71, 71),
-    origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(17, 34),
-    scaledSize: new google.maps.Size(25, 25)
-  };
-
-  var placeLoc = this.client.location;
-  var marker = new google.maps.Marker({
-    map: this.map,
-    position: placeLoc,
-    title: this.client.title
-  });
-
-  google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.setContent(this.client.title);
-    infoWindow.open(this.map, this);
-    infoWindow.setContent('<div><strong>' + this.client.title + '</strong><br>' );
-  infoWindow.open(this.map, this);
-
-  });
-}   */
+*/
 
 
  

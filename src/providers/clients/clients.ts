@@ -30,6 +30,11 @@ export class ClientsProvider {
         bool: false,
         docId: null,
         interval: null,
+        todo: {
+            title: 'My Todo',
+            date: '12.01.2019',
+            description: 'Make dinner tonight.'
+        }
     };
 
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {
@@ -57,6 +62,10 @@ export class ClientsProvider {
 
     getClients() {
         return this.clientList;
+    }
+
+    getSpecificClient(clientId){
+        //return this.clientList
     }
 
     //what to remove and where?
