@@ -6,9 +6,7 @@ import {Geolocation} from '@ionic-native/geolocation';
 import {SuperTabs} from 'ionic2-super-tabs';
 import firebase from 'firebase';
 import {CustomAlertMessage} from "../../model/customAlertMessage";
-import {error} from "util";
 import {LoginPage} from "../login/login";
-import {UserLogout} from "../../helper/userLogout";
 
 @IonicPage()
 @Component({
@@ -37,14 +35,12 @@ export class HomePage {
 
     constructor(public navCtrl: NavController, private afAuth: AngularFireAuth,
                 public geolocation: Geolocation, public navParams: NavParams,
-                private alertController: AlertController,) {
+                private alertController: AlertController) {
 
         this.customAlertMessage = new CustomAlertMessage(this.alertController);
     }
 
     ionViewDidLoad() {
-
-
     }
 
     //clear badge when user not on Google Maps

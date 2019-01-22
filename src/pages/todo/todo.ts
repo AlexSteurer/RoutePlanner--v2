@@ -1,10 +1,11 @@
 import {Component, ViewChild} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ClientsProvider} from "../../providers/clients/clients";
 import {AngularFireAuth} from "angularfire2/auth";
 import firebase from 'firebase';
-import {TasksPage} from "../tasks/tasks";
 import {StartPage} from "../start/start";
+import {CustomAlertMessage} from "../../model/customAlertMessage";
+import {StorageKeys} from "../../key/storageKeys";
 
 /**
  * Generated class for the TodoPage page.
@@ -31,18 +32,21 @@ export class TodoPage {
     db = firebase.firestore();
     private theDocId = '';
     private userUID = '';
+    private customAlertMessage: CustomAlertMessage;
+
 
     constructor(public navCtrl: NavController, public navParams: NavParams,
                 private afAuth: AngularFireAuth,
-                private clientsProvider: ClientsProvider) {
+                private clientsProvider: ClientsProvider,
+                private alertController: AlertController) {
 
         this.clientList = this.clientsProvider.getClients();
+        this.customAlertMessage = new CustomAlertMessage(this.alertController);
     }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad TodoPage');
-        this.theDocId = this.navParams.get('theDocId');
-        console.log('ionViewDidLoad TodoPage docId:', this.theDocId);
+        this.theDocId = this.navParams.get(StorageKeys.THE_DOCUMENT_ID);
         this.clientList = this.clientsProvider.getClients();
         //Fetching the clientTodo attribute from Firestore Document
         this.afAuth.authState.subscribe(user => {
@@ -75,7 +79,7 @@ export class TodoPage {
                 description: this.descriptionView.value
             }
         }).then(() => console.log('todo success!!'))
-            .catch(error => console.log('error todo: ', error.err));
+            .catch(error => this.customAlertMessage.errorAlert(error.error));
         //redirect then to Google Maps
         this.navCtrl.setRoot(StartPage)
     }
