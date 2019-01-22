@@ -3,6 +3,8 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ClientsProvider} from "../../providers/clients/clients";
 import {AngularFireAuth} from "angularfire2/auth";
 import firebase from 'firebase';
+import {TasksPage} from "../tasks/tasks";
+import {StartPage} from "../start/start";
 
 /**
  * Generated class for the TodoPage page.
@@ -27,10 +29,8 @@ export class TodoPage {
 
     clientList: any;
     db = firebase.firestore();
-    myDoc: any;
     private theDocId = '';
     private userUID = '';
-
 
     constructor(public navCtrl: NavController, public navParams: NavParams,
                 private afAuth: AngularFireAuth,
@@ -58,56 +58,25 @@ export class TodoPage {
                     })
                 });
             }
-            /*const test = this.db.collection(user.uid).doc(this.theDocId);
-            console.log('ionViewDidLoad TodoPage docId:', test);*/
         });
-    }
-
-    // Liste wird nicht geupdatet.. .warum auch immer....
-    getItems(event: any) {
-        this.clientsProvider.getClients();
-
-        const val = event.target.value;
-
-        this.clientsProvider.getClients().subscribe(client => {
-            this.clientList = client;
-            console.log(client.title);
-            this.clientList = this.clientsProvider.getClients()
-                .filter((function (client) {
-                    if (val && val.trim() !== '') {
-                        return client.title
-                            .toLowerCase().indexOf(val.toLowerCase()) > -1;
-                    }
-                }))
-        })
     }
 
     private clearUserInput() {
-
+        this.titleView.value = '';
+        this.todoDateView.value = '';
+        this.descriptionView.value = '';
     }
 
     private saveUserInput() {
-
-    }
-
-    //add document to Firestore
-    /*private addToFireSTore(){
-        this.db.collection(this.userUID).add({
-            title: '',
-            location: null,
-            address: null,
-            placeId: null,
-            extra_info: null,
-            timestamp: undefined,
-            docId: null,
-            time_chosen: 1515283200,
-            time_half: 1515283200,
-            interval: null,
+        this.db.collection(this.userUID).doc(this.theDocId).update({
             todo: {
-                title: 'My Todo',
-                date: '12.01.2019',
-                description: 'Make dinner tonight.'
+                title: this.titleView.value,
+                date: this.todoDateView.value,
+                description: this.descriptionView.value
             }
-        });
-    }*/
+        }).then(() => console.log('todo success!!'))
+            .catch(error => console.log('error todo: ', error.err));
+        //redirect then to Google Maps
+        this.navCtrl.setRoot(StartPage)
+    }
 }
