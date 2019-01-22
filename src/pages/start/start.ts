@@ -42,9 +42,9 @@ export class StartPage {
         time_half: 1515283200,
         interval: null,
         todo: {
-            title: 'My Todo',
-            date: '12.01.2019',
-            description: 'Make dinner tonight.'
+            title: 'Not defined TODO',
+            date: '',
+            description: ''
         }
     };
 
