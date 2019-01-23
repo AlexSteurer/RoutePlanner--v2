@@ -18,8 +18,6 @@ import {AngularFireAuth} from "angularfire2/auth";
 export class TasksPage {
 
     clientList: any;
-    private showTodoInfo: boolean = false; //Whatever you want to initialise it as
-
 
     constructor(public navCtrl: NavController, public navParams: NavParams,
                 private clientsProvider: ClientsProvider,
@@ -30,27 +28,5 @@ export class TasksPage {
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad TasksPage');
-    }
-
-    getItems(event: any) {
-        this.clientsProvider.getClients();
-
-        const val = event.target.value;
-
-        this.clientsProvider.getClients().subscribe(client => {
-            this.clientList = client;
-            this.clientList = this.clientsProvider.getClients()
-                .filter((function (client) {
-                    if (val && val.trim() !== '') {
-                        return client.todo.title
-                            .toLowerCase().indexOf(val.toLowerCase()) > -1;
-                    }
-                }))
-        })
-    }
-
-    private getTodoInfo(){
-        this.showTodoInfo = !this.showTodoInfo;
-        console.log("show info: ", this.showTodoInfo);
     }
 }

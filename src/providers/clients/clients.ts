@@ -31,9 +31,10 @@ export class ClientsProvider {
         docId: null,
         interval: null,
         todo: {
-            title: 'Not defined TODO',
+            title: '',
             date: '',
-            description: ''
+            description: '',
+            showTodo: false
         }
     };
 
