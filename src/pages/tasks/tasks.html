@@ -14,8 +14,9 @@
 <ion-content padding>
     <ion-list>
         <ion-item-sliding *ngFor="let client of clientList | async">
-            <button ion-item tappable *ngIf="client.todo.title !== ''">
-                <h2>{{client.todo.title}}</h2>
+            <button id="task-title" ion-item tappable *ngIf="client.todo.title !== ''" style="text-align:center; vertical-align:middle">
+                {{client.todo.title}}
+                <ion-icon id="slider-arrow" name="arrow-round-forward"></ion-icon>
             </button>
             <ion-item-options side="right">
                 <button ion-button color="light" (click)="client.todo.showTodo = !client.todo.showTodo ">
