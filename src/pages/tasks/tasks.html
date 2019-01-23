@@ -14,20 +14,21 @@
 <ion-content padding>
     <ion-list>
         <ion-item-sliding *ngFor="let client of clientList | async">
-            <button ion-item tappable>
-                <h2>{{client.todo.title}}</h2>
+            <button id="task-title" ion-item tappable *ngIf="client.todo.title !== ''" style="text-align:center; vertical-align:middle">
+                {{client.todo.title}}
+                <ion-icon id="slider-arrow" name="arrow-round-forward"></ion-icon>
             </button>
             <ion-item-options side="right">
-                <button ion-button color="light" (click)="getTodoInfo()">
+                <button ion-button color="light" (click)="client.todo.showTodo = !client.todo.showTodo ">
                     <ion-icon name="information-circle"></ion-icon>
                 </button>
             </ion-item-options>
-            <ion-item *ngIf="showTodoInfo">
+            <ion-item *ngIf="client.todo.showTodo  && client.todo.title !== ''">
                 <ion-label>Date:</ion-label>
                 <ion-input type="text" required [(ngModel)]="client.todo.date"></ion-input>
             </ion-item>
-            <ion-label *ngIf="showTodoInfo">Description:</ion-label>
-            <ion-item *ngIf="showTodoInfo">
+            <ion-label *ngIf="client.todo.showTodo  && client.todo.title !== ''">Description:</ion-label>
+            <ion-item *ngIf="client.todo.showTodo  && client.todo.title !== ''">
                 <ion-textarea id="todo-description" [(ngModel)]="client.todo.description"></ion-textarea>
             </ion-item>
         </ion-item-sliding>
