@@ -18,6 +18,7 @@ import {StyledMap} from "../../model/styledMap";
 import {TodoPage} from "../todo/todo";
 import {ModalinfoPage} from "../modalinfo/modalinfo";
 
+
 declare let google;
 let infoWindow: any;
 let service: any;
@@ -38,8 +39,8 @@ export class StartPage {
         extra_info: null,
         timestamp: undefined,
         docId: null,
-        time_chosen: 1515283200,
-        time_half: 1515283200,
+        time_chosen: null,
+        time_half: null,
         interval: null,
         todo: {
             title: 'My Todo',
@@ -63,6 +64,7 @@ export class StartPage {
     private customAlertMsg: CustomAlertMessage;
     static theDocId = '';
 
+
     constructor(public navCtrl: NavController, private afAuth: AngularFireAuth,
                 public geolocation: Geolocation, public navParams: NavParams,
                 private alertCtrl: AlertController,
@@ -72,7 +74,7 @@ export class StartPage {
 
         this.todayDateObj = new Date();
         this.navCtrl = navCtrl;
-        //events.subscribe('client:deleted', client => this.loadMap());
+       // events.subscribe('client:deleted', client => this.loadMap());
 
         this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
         this.autocomplete = {input: ''};
@@ -113,13 +115,16 @@ export class StartPage {
      * @param item suggested address from search bar
      */
     selectSearchResult(item) {
+        let time_chosen : null;
+        let time_half :null ;
+        let icon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
         this.markers = [];
         this.autocompleteItems = [];
         this.geocoder
             .geocode({'placeId': item.place_id}, (results, status) => {
                 if (status === 'OK' && results[0]) {
                     let address = this.setClientAttributes(results, item);
-                    let marker = this.createMarkerOnGoogleMaps(results, item.description);
+                    let marker = this.createMarkerOnGoogleMaps(results, item.description,icon);
                     this.saveClient();
                     let infoWindow = this.createClientInfoWindow(address, this.client.title);
                     console.log("doc id: ", item.id);
@@ -164,17 +169,29 @@ export class StartPage {
     };
 
     createListMarkers() {
+        let icon: string;
         this.afAuth.authState.subscribe(user => {
             if (user) {
                 this.userId = user.uid;
                 this.db.collection(user.uid).get().then(docs => {
                     docs.forEach(coordinate => {
                         console.log('coordinate id:', coordinate.id);
+                        const time_chosen = coordinate.data().time_chosen;
+                        const time_half = coordinate.data().time_half;
+
+                        if(time_chosen == null && time_half == null){
+
+                            icon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+                        }
+                        else{
+                            icon = this.changeMarkerColor(time_chosen,time_half);
+                        }
+
                         const title = coordinate.data().title;
                         const address = coordinate.data().adress;
                         const placeId = coordinate.data().placeId;
                         const position = new google.maps.LatLng(coordinate.data().location._lat, coordinate.data().location._long);
-                        const marker = this.createMarkerOnGoogleMaps(position, title);
+                        const marker = this.createMarkerOnGoogleMaps(position, title, icon);
                         const infoWindow = this.createClientInfoWindow(address, title);
                         this.addListenerOnGoogleMaps(infoWindow, marker, placeId, coordinate.id);
                     })
@@ -182,6 +199,43 @@ export class StartPage {
             }
         });
     }
+    /**
+     * Sets a marker on maps when user clicks on 'Add Client'.
+     * @param item suggested address from search bar
+     */
+    changeMarkerColor(time_chosen,time_half) {
+
+        let icon: string;
+        const chosen = time_chosen;
+        const half = time_half;
+        const now = moment();
+
+        console.log(now);
+        console.log(chosen);
+        console.log(half);
+
+
+            if(now.isAfter(moment.unix(chosen.seconds))){
+                icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+                console.log(icon);
+                return icon;
+            }
+            if(now.isAfter(moment.unix(half.seconds)) && now.isBefore(moment.unix(chosen.seconds))){
+                icon = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+                console.log(icon);
+                return icon;
+
+            }
+
+            else {
+                icon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+                console.log(icon);
+                return icon;
+            }
+
+    }
+        
+
 
     /**
      * Sets a blue marker on Google Map
@@ -189,15 +243,20 @@ export class StartPage {
      * @param title contains the name of the building/place
      * @return google.maps.Marker
      */
-    private createMarkerOnGoogleMaps(position, title) {
-        return new google.maps.Marker({
-            position,
-            map: this.map,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-            title: title,
-            animation: google.maps.Animation.DROP,
-        });
-    }
+    private createMarkerOnGoogleMaps(position, title, icon) {
+
+            return new google.maps.Marker({
+                position,
+                map: this.map,
+                icon: icon,
+                title: title,
+                animation: google.maps.Animation.DROP,
+            });
+
+
+
+        }
+
 
     loadMap() {
         this.geolocation.getCurrentPosition().then(position => {

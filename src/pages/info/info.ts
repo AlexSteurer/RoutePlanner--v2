@@ -54,9 +54,7 @@ export class InfoPage {
         this.currentDate = new Date();
     }
 
-    ionViewWillLoad() {
 
-    }
 
     ionViewDidLoad() {
 
@@ -65,8 +63,8 @@ export class InfoPage {
     resetTimeStamp() {
         let inter = this.clientsProvider.clientData.interval;
         let half = math.round(this.clientsProvider.clientData.interval / 2);
-        let new_full = moment(this.currentDate).add(inter, 'days').toDate();
-        let new_half = moment(this.currentDate).add(half, 'days').toDate();
+        let new_full = moment(this.currentDate).add(inter, 'minutes').toDate();
+        let new_half = moment(this.currentDate).add(half, 'minutes').toDate();
 
         this.afAuth.authState.subscribe(user => {
             if (user) {
@@ -79,17 +77,18 @@ export class InfoPage {
                     time_half: new_half,
                 })
         })
+        //this.closeModal();
     }
 
     timeConvert() {
         this.new_date = moment(this.currentDate)
-            .add(this.day_interval, 'days')
+            .add(this.day_interval, 'minutes')
             .toDate();
 
         let half_inter = math.round(this.day_interval / 2);
 
         this.day_interval_half = moment(this.currentDate)
-            .add(half_inter, 'days')
+            .add(half_inter, 'minutes')
             .toDate();
     }
 
