@@ -11,27 +11,24 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content padding>
     <ion-list>
-        <ion-card>
-            <ion-item-sliding *ngFor="let client of clientList | async">
-
-                <ion-item tappable>
-                    <h2>{{client.title}}</h2>
-                </ion-item>
-
-                <ion-item-options side="right">
-                    <button ion-button color="secondary" (click)="navMe(client.id)">
-                        <ion-icon name="navigate"></ion-icon>
-                    </button>
-                    <button ion-button color="secondary" (click)="edit(client.id)">
-                        <ion-icon name="build"></ion-icon>
-                    </button>
-                    <button ion-button color="danger" (click)="delete(client)">
-                        <ion-icon name="trash"></ion-icon>
-                    </button>
-                </ion-item-options>
-            </ion-item-sliding>
-        </ion-card>
+        <ion-item-sliding *ngFor="let client of clientList | async">
+            <ion-item tappable *ngIf="client.title !== ''">
+                {{client.title}}
+                <ion-icon id="slider-arrow" name="arrow-round-forward"></ion-icon>
+            </ion-item>
+            <ion-item-options side="right">
+                <button ion-button color="secondary" (click)="navMe(client.id)">
+                    <ion-icon name="navigate"></ion-icon>
+                </button>
+                <button id="edit-button" ion-button color="secondary" (click)="edit(client.id)">
+                    <ion-icon name="build"></ion-icon>
+                </button>
+                <button ion-button color="danger" (click)="delete(client)">
+                    <ion-icon name="trash"></ion-icon>
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
     </ion-list>
 </ion-content>
