@@ -22,17 +22,19 @@
 
 
     <ion-list>
-        <ion-list-header>
-            Choosen time Interval:
-        </ion-list-header>
-        <ion-badge > {{this.clientsProvider.clientData.interval}}</ion-badge>
+        <ion-badge>
+            Choosen time Interval: {{this.clientsProvider.clientData.interval}}
+        </ion-badge>
+
 
     </ion-list>
 
+    <ion-item>
+    <h2 position="floating">Additional Client Information:</h2>
 
-    <h2>Additional Client Information:</h2>
     <p>{{this.clientsProvider.clientData.info}}</p>
 
+    </ion-item>
 
     <!--  (click)="edit(client)"  -->
 </ion-content>

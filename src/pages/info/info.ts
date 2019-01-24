@@ -28,8 +28,8 @@ export class InfoPage {
     clientList: Observable<any[]>;
     userId: String;
     updateId = null;
-    public infoText: String;
-    public day_interval: number;
+    public infoText = '';
+    public day_interval = 0;
     public new_date: Date;
     public day_interval_half: Date;
     public currentDate: Date;
@@ -106,6 +106,7 @@ export class InfoPage {
             return this.afs
                 .doc(user.uid + '/' + this.clientsProvider.clientData.docId)
                 .update({
+
                     extra_info: this.infoText,
                     time_chosen: this.new_date,
                     time_half: this.day_interval_half,

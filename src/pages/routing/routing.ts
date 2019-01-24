@@ -108,6 +108,7 @@ export class RoutingPage {
     //if the value is an empty string don't filter the items
 
     edit(docId) {
+
         console.log(docId);
         let clientsProvider = this.clientsProvider;
         let db = firebase.firestore();
@@ -119,6 +120,8 @@ export class RoutingPage {
                 .get()
                 .then(function (doc) {
                     if (doc.exists) {
+
+
                        // this.setClientDataAttributes(clientsProvider, doc, docId);
                         clientsProvider.clientData.title = doc.data().title;
                         console.log(clientsProvider.clientData.title);

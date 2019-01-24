@@ -28,17 +28,17 @@
 
 
     <ion-list>
-        <ion-list-header>
-            Choose an interval in days:
-        </ion-list-header>
-        <ion-badge item-start> {{this.clientsProvider.clientData.interval}}</ion-badge>
+        <ion-badge>
+            Choosen time Interval: {{this.clientsProvider.clientData.interval}}
+        </ion-badge>
+
         <ion-item>
             <ion-range min="0" max="365" pin="true" [(ngModel)]="day_interval" color="primary">
                 <ion-label range-left>No intervall</ion-label>
                 <ion-label range-right>Day´s</ion-label>
             </ion-range>
         </ion-item>
-        <button ion-button (click)="resetTimeStamp()">Reset intervall</button>
+        <button ion-button (click)="resetTimeStamp()" align-self-center="">Reset intervall</button>
     </ion-list>
 
 
