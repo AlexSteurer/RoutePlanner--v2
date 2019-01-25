@@ -15,10 +15,8 @@ import {LoginPage} from "../login/login";
 })
 export class HomePage {
 
-    userId: any;
     db = firebase.firestore();
     public map: any;
-    //what does google do?
     google: any;
     private customAlertMessage: CustomAlertMessage;
 
