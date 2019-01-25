@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header no-border>
-    <ion-searchbar no-border [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()"
+    <ion-searchbar no-border [(ngModel)]="autocomplete.input" (ionInput)="checkInputForSearchField()"
                    placeholder="Search for a place"></ion-searchbar>
 
     <ion-list [hidden]="autocompleteItems.length == 0">
