@@ -88,4 +88,5 @@
         <string>We want your location! Best regards NSA</string>
     </edit-config>
     <engine name="android" spec="^7.1.4" />
+    <engine name="ios" spec="4.5.5" />
 </widget>
