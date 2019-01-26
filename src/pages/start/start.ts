@@ -134,6 +134,10 @@ export class StartPage {
         });
     }
 
+    /**
+     * Loads all markers (documents) from Cloud Firestore
+     * @param placeId unique string to coordination
+     */
     markerLoad(placeId) {
         let lat;
         let lng;
@@ -153,8 +157,9 @@ export class StartPage {
             }
         );
         this.redirectToInfoModal();
-    };
+    }
 
+    //Here all markers on the maps gets created.
     createListMarkers() {
         let colorMapsMarker: string;
         this.afAuth.authState.subscribe(user => {
@@ -162,7 +167,7 @@ export class StartPage {
                 this.userId = user.uid;
                 this.db.collection(user.uid).get().then(docs => {
                     docs.forEach(coordinate => {
-                        this.fillDataForMarker(coordinate, colorMapsMarker);
+                        this.fillMarkerWithData(coordinate, colorMapsMarker);
                     })
                 })
             }
@@ -174,7 +179,7 @@ export class StartPage {
      * @param coordinate is the document from Cloud Firestore
      * @param colorMapsMarker color of the marker can only be blue, yellow or red
      */
-    private fillDataForMarker(coordinate, colorMapsMarker: string) {
+    private fillMarkerWithData(coordinate, colorMapsMarker: string) {
         const time_chosen = coordinate.data().time_chosen;
         const time_half = coordinate.data().time_half;
         if (time_chosen == null && time_half == null) {
@@ -182,6 +187,7 @@ export class StartPage {
         } else {
             colorMapsMarker = this.changeMarkerColor(time_chosen, time_half);
         }
+
         const title = coordinate.data().title;
         const address = coordinate.data().adress;
         const placeId = coordinate.data().placeId;
@@ -192,9 +198,10 @@ export class StartPage {
     }
 
     /**
-     *
-     * @param time_chosen
-     * @param time_half
+     * After half of the set interval has passed the marker turns yellow.
+     * After the complete interval has passed the marker turns red
+     * @param time_chosen the complete interval given time (in minutes)
+     * @param time_half half of the complete interval given time (in minutes)
      */
     changeMarkerColor(time_chosen, time_half) {
 
@@ -219,25 +226,23 @@ export class StartPage {
 
 
     /**
-     * Sets a blue marker on Google Map
-     * @param position contains latitude and longitude
-     * @param title contains the name of the building/place
-     * @return google.maps.Marker
+     * Sets a default blue marker on the map.
+     * @param position contains the Lat & Long value of the coordinate
+     * @param title of the position
+     * @param marker by default it is a blue marker
      */
-    private createMarkerOnGoogleMaps(position, title, icon) {
+    private createMarkerOnGoogleMaps(position, title, marker) {
 
         return new google.maps.Marker({
             position,
             map: this.map,
-            icon: icon,
+            icon: marker,
             title: title,
             animation: google.maps.Animation.DROP,
         });
-
-
     }
 
-
+    //Shows the Google Map plus all the set markers on it
     loadMap() {
         this.geolocation.getCurrentPosition().then(position => {
             let mapOptions = this.createMapOptions(position);
@@ -249,6 +254,7 @@ export class StartPage {
         }, err => this.customAlertMsg.errorAlert(err.error));
     }
 
+    // When user types a place in the search field, Google's autocomplete shows suggestion.
     private showUserPlacePrediction() {
         this.GoogleAutocomplete
             .getPlacePredictions({
@@ -264,19 +270,20 @@ export class StartPage {
     }
 
     /**
-     * Sets listener on google maps.
-     * @param infoWindow
-     * @param marker
-     * @param placeId
+     * Sets a click listener for the markers and shows the info window.
+     * @param infoWindow shows the title, address of the marker
+     * and contains two links for todos and modalinfos
+     * @param marker contains Lat & Long from the place
+     * @param placeId required id to identify place could look like this 'ChIJ_d7vP2UHbUcRElip0qAzmR4'
+     * @param documentId every marker on the map is a document in Cloud Firestore
      */
     private addListenerOnGoogleMaps(infoWindow, marker, placeId, documentId) {
-
         google.maps.event
             .addListenerOnce(infoWindow, 'domready', () => {
                 document.getElementById('myid')
                     .addEventListener('click', () => {
                         this.redirectToTasks();
-                    })
+                    });
                 document.getElementById('modalid')
                     .addEventListener('click', () => {
                         this.markerLoad(placeId);
@@ -287,14 +294,15 @@ export class StartPage {
             .addListener(marker, 'click', function () {
                 infoWindow.open(this.map, this);
                 StartPage.theDocId = documentId;
-                console.log("the doc id: ", StartPage.theDocId);
             });
     }
 
     /**
-     *
-     * @param address contains street, number and city
-     * @returns {google.maps.InfoWindow}
+     * Shows the title, address of the marker and contains two links for todos and modalinfos
+     * @param address is set if a building like FH Technikum was entered,
+     * so address would be Höchstädtplatz Höchstädtpl. 6, 1200 Wien, otherwise address is empty
+     * @param title can be the name of a building or street with number
+     * @return google.maps.InfoWindow
      */
     private createClientInfoWindow(address, title) {
         return new google.maps.InfoWindow({
@@ -306,6 +314,13 @@ export class StartPage {
         });
     }
 
+    /**
+     * All the attributes for the client object get set.
+     * Every client ist marker on the map.
+     * @param results are Google's suggestions from the search input
+     * @param item
+     * @return address
+     */
     private setClientAttributes(results, item) {
 
         let lat = results[0].geometry.location.lat();
@@ -315,11 +330,12 @@ export class StartPage {
         this.client.timestamp = moment(this.todayDateObj).toDate();
         let address;
         let id;
+
         for (let i = 0; i < results.length; i++) {
             address = results[i].formatted_address;
             id = results[i].place_id;
-
         }
+
         this.client.address = address;
         this.client.placeId = id;
         return address;
