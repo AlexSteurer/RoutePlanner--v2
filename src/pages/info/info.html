@@ -6,7 +6,7 @@
 -->
 <ion-header>
     <ion-navbar>
-        <ion-title>Client´s Page</ion-title>
+        <ion-title>Client's Page</ion-title>
         <ion-buttons end>
             <button ion-button icon-only (click)="closeModal()">
                 <ion-icon name="close"></ion-icon>
@@ -20,36 +20,33 @@
     <ion-card #textblock tappable>
         <ion-item-sliding>
             <ion-item>
-                <h2>{{this.clientsProvider.clientData.title}}</h2>
-                <p>{{this.clientsProvider.clientData.address}}</p>
+                <h2>{{clientsProvider.clientData.title}}</h2>
+                <p>{{clientsProvider.clientData.address}}</p>
             </ion-item>
         </ion-item-sliding>
     </ion-card>
 
-
     <ion-list>
         <ion-badge>
-            Choosen time Interval: {{this.clientsProvider.clientData.interval}}
+            Chosen time interval: {{clientsProvider.clientData.interval}}
         </ion-badge>
 
         <ion-item>
             <ion-range min="0" max="365" pin="true" [(ngModel)]="day_interval" color="primary">
-                <ion-label range-left>No intervall</ion-label>
-                <ion-label range-right>Day´s</ion-label>
+                <ion-label range-left>No interval</ion-label>
+                <ion-label range-right>Day's</ion-label>
             </ion-range>
         </ion-item>
-        <button ion-button (click)="resetTimeStamp()" align-self-center="">Reset intervall</button>
+        <button ion-button (click)="resetTimeStamp()" align-self-center="">Reset interval</button>
     </ion-list>
-
 
     <ion-item tappable>
     </ion-item>
 
-    <h2>Additional Client Information:</h2>
-    <p>{{this.clientsProvider.clientData.info}}</p>
+    <h2>Additional client information:</h2>
+    <p>{{clientsProvider.clientData.info}}</p>
     <ion-textarea [(ngModel)]="infoText"> {{infoText}}</ion-textarea>
-    <button ion-button small (click)="updateInformation(this.clientsProvider.clientData.docId)">Update Client</button>
-    <p>{{this.clientsProvider.clientData.id}}</p>
+    <button ion-button small (click)="updateInformation(clientsProvider.clientData.docId)">Update client</button>
+    <p>{{clientsProvider.clientData.id}}</p>
 
-    <!--  (click)="edit(client)"  -->
 </ion-content>

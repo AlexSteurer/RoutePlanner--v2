@@ -55,11 +55,10 @@ export class InfoPage {
     }
 
 
-
     ionViewDidLoad() {
-
     }
 
+    //Reset of time interval for visiting client.
     resetTimeStamp() {
         let inter = this.clientsProvider.clientData.interval;
         let half = math.round(this.clientsProvider.clientData.interval / 2);
@@ -77,9 +76,9 @@ export class InfoPage {
                     time_half: new_half,
                 })
         })
-        //this.closeModal();
     }
 
+    //Converts days to minutes.
     timeConvert() {
         this.new_date = moment(this.currentDate)
             .add(this.day_interval, 'minutes')
@@ -96,6 +95,7 @@ export class InfoPage {
         this.viewCtrl.dismiss();
     }
 
+    //Updates for a specific document in Cloud Firestore time relevant attributes of a client.
     updateInformation() {
         this.timeConvert();
 
@@ -113,7 +113,6 @@ export class InfoPage {
                     interval: this.day_interval,
                 })
         });
-
         this.closeModal();
     }
 }
