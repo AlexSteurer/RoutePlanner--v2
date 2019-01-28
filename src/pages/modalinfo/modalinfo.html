@@ -1,6 +1,6 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>Client´s Page</ion-title>
+        <ion-title>Client's Page</ion-title>
         <ion-buttons end>
             <button ion-button icon-only (click)="closeModal()">
                 <ion-icon name="close"></ion-icon>
@@ -14,27 +14,20 @@
     <ion-card #textblock tappable>
         <ion-item-sliding>
             <ion-item>
-                <h2>{{this.clientsProvider.clientData.title}}</h2>
-                <p>{{this.clientsProvider.clientData.address}}</p>
+                <h2>{{clientsProvider.clientData.title}}</h2>
+                <p>{{clientsProvider.clientData.address}}</p>
             </ion-item>
         </ion-item-sliding>
     </ion-card>
 
-
     <ion-list>
         <ion-badge>
-            Choosen time Interval: {{this.clientsProvider.clientData.interval}}
+            Chosen time interval: {{clientsProvider.clientData.interval}}
         </ion-badge>
-
-
     </ion-list>
 
     <ion-item>
-    <h2 position="floating">Additional Client Information:</h2>
-
-    <p>{{this.clientsProvider.clientData.info}}</p>
-
+        <h2 position="floating">Additional client information:</h2>
+        <p>{{clientsProvider.clientData.info}}</p>
     </ion-item>
-
-    <!--  (click)="edit(client)"  -->
 </ion-content>
