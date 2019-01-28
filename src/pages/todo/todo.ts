@@ -34,7 +34,6 @@ export class TodoPage {
     private userUID = '';
     private customAlertMessage: CustomAlertMessage;
 
-
     constructor(public navCtrl: NavController, public navParams: NavParams,
                 private afAuth: AngularFireAuth,
                 private clientsProvider: ClientsProvider,
@@ -45,7 +44,6 @@ export class TodoPage {
     }
 
     ionViewDidLoad() {
-        console.log('ionViewDidLoad TodoPage');
         this.theDocId = this.navParams.get(StorageKeys.THE_DOCUMENT_ID);
         this.clientList = this.clientsProvider.getClients();
         //Fetching the clientTodo attribute from Firestore Document
@@ -65,12 +63,14 @@ export class TodoPage {
         });
     }
 
+    //Removes all typed characters in HTML site
     private clearUserInput() {
         this.titleView.value = '';
         this.todoDateView.value = '';
         this.descriptionView.value = '';
     }
 
+    //Only updates the attributes title, date and description from a marker in Cloud Firestore
     private saveUserInput() {
         this.db.collection(this.userUID).doc(this.theDocId).update({
             todo: {
@@ -78,7 +78,7 @@ export class TodoPage {
                 date: this.todoDateView.value,
                 description: this.descriptionView.value
             }
-        }).then(() => console.log('todo success!!'))
+        }).then(() => console.log('todo saved!'))
             .catch(error => this.customAlertMessage.errorAlert(error.error));
         //redirect then to Google Maps
         this.navCtrl.setRoot(StartPage)

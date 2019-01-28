@@ -27,6 +27,5 @@ export class TasksPage {
     }
 
     ionViewDidLoad() {
-        console.log('ionViewDidLoad TasksPage');
     }
 }
