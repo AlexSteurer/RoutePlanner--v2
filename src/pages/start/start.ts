@@ -318,7 +318,7 @@ export class StartPage {
      * All the attributes for the client object get set.
      * Every client ist marker on the map.
      * @param results are Google's suggestions from the search input
-     * @param item
+     * @param item represents a specific building or address
      * @return address
      */
     private setClientAttributes(results, item) {
@@ -341,6 +341,13 @@ export class StartPage {
         return address;
     }
 
+    /**
+     * All attributes to show a marker on the map gets set.
+     * @param doc repesents a document in Cloud Firestore
+     * @param lat
+     * @param lng
+     * @param clientsProvider interface to Firestore collection
+     */
     private setClientData(doc, lat, lng, clientsProvider) {
         doc.data().location._lat = lat;
         doc.data().location._lng = lng;
@@ -354,9 +361,8 @@ export class StartPage {
     }
 
     /**
-     *
-     * @param position
-     * @return mapOptions
+     * @param position contains position (Lat & Long) of user
+     * @return mapOptions style of map and default zoom in map gets set.
      */
     private createMapOptions(position) {
 
@@ -377,14 +383,11 @@ export class StartPage {
         return mapOptions
     }
 
-
     redirectToInfoModal() {
 
-        //this.navCtrl.push(ModalinfoPage);
         let modal = this.modalCtrl.create(ModalinfoPage);
         modal.present()
             .then(val => console.log("ModalInfoWindow success"))
             .catch(err => console.log("ModalInfoWindow error: ", err.error));
-
     }
 }
