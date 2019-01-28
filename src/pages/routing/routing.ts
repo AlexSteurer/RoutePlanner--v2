@@ -1,17 +1,13 @@
 import {Observable} from 'rxjs';
 import {InfoPage} from './../info/info';
-import {StartPage} from './../start/start';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {ClientsProvider} from './../../providers/clients/clients';
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams, ModalController} from 'ionic-angular';
 import {Events} from 'ionic-angular';
 import firebase from 'firebase';
-
-
-import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/filter'
-import {LaunchNavigator,LaunchNavigatorOptions} from "@ionic-native/launch-navigator";
+import {LaunchNavigator, LaunchNavigatorOptions} from "@ionic-native/launch-navigator";
 
 
 /**
@@ -34,8 +30,6 @@ export class RoutingPage {
     private userId: String;
     start: string;
     destination: string;
-    
-
 
     constructor(public navCtrl: NavController, public navParams: NavParams,
                 private clientsProvider: ClientsProvider,
@@ -50,18 +44,16 @@ export class RoutingPage {
 
     ionViewDidLoad() {
         this.clientList = this.clientsProvider.getClients();
-        console.log(this.clientList);
-        console.log('ionViewDidLoad RoutingPage');
     }
 
-    //Takes the client´s id to search for the adress from the corresponding doc - then starts launchNavigator for nav.
+    /**
+     * Takes the clients id to search for the address from the corresponding document.
+     * After then starts launchNavigator for navigation.
+     * @param docId
+     */
     navMe(docId) {
-        console.log(docId);
         let launchNav = this.launchNavigator;
-        let options: LaunchNavigatorOptions = {
-            start: this.start
-        }
-
+        let options: LaunchNavigatorOptions = {start: this.start};
         let db = firebase.firestore();
         this.afAuth.authState.subscribe(user => {
             if (user) {
@@ -72,7 +64,6 @@ export class RoutingPage {
                 .then(function (doc) {
                     if (doc.exists) {
                         let destination = doc.data().address;
-                        console.log(destination);
                         launchNav.navigate(destination, options)
                             .then(
                                 success => alert('Launched navigator'),
@@ -83,16 +74,16 @@ export class RoutingPage {
         })
     }
 
-
-
-    // Liste wird nicht geupdatet.. .warum auch immer....
+    /**
+     * Iterates for markers when user types letters in search field.
+     * @param event enables to search for saved marker in Cloud Firestore
+     */
     getItems(event: any) {
         this.clientsProvider.getClients();
         const val = event.target.value;
 
         this.clientsProvider.getClients().subscribe(client => {
             this.clientList = client;
-            console.log(client.title);
             this.clientList = this.clientsProvider.getClients()
                 .filter((function (client) {
                     if (val && val.trim() !== '') {
@@ -103,13 +94,11 @@ export class RoutingPage {
         })
     }
 
-    // set val to the value of the search bar
-
-    //if the value is an empty string don't filter the items
-
+    /**
+     * Sets values for the attributes of a marker on the map.
+     * @param docId specific document (marker on map) from a user collection
+     */
     edit(docId) {
-
-        console.log(docId);
         let clientsProvider = this.clientsProvider;
         let db = firebase.firestore();
         this.afAuth.authState.subscribe(user => {
@@ -120,21 +109,13 @@ export class RoutingPage {
                 .get()
                 .then(function (doc) {
                     if (doc.exists) {
-
-
-                       // this.setClientDataAttributes(clientsProvider, doc, docId);
                         clientsProvider.clientData.title = doc.data().title;
-                        console.log(clientsProvider.clientData.title);
                         clientsProvider.clientData.address = doc.data().address;
-                        console.log(clientsProvider.clientData.address);
                         clientsProvider.clientData.id = doc.data().placeId;
-                        console.log(clientsProvider.clientData.id);
                         clientsProvider.clientData.info = doc.data().extra_info;
-                        console.log(clientsProvider.clientData.info);
                         clientsProvider.clientData.timestamp = doc.data().timestamp;
                         clientsProvider.clientData.docId = docId;
                         clientsProvider.clientData.interval = doc.data().interval;
-                        console.log(clientsProvider.clientData.docId);
                     }
                 })
         });
@@ -142,27 +123,8 @@ export class RoutingPage {
         modal.present();
     }
 
-    /*private setClientDataAttributes(clientsProvider, doc, docId) {
-        clientsProvider.clientData.title = doc.data().title;
-        console.log(clientsProvider.clientData.title);
-        clientsProvider.clientData.address = doc.data().address;
-        console.log(clientsProvider.clientData.address);
-        clientsProvider.clientData.id = doc.data().placeId;
-        console.log(clientsProvider.clientData.id);
-        clientsProvider.clientData.info = doc.data().extra_info;
-        console.log(clientsProvider.clientData.info);
-        clientsProvider.clientData.timestamp = doc.data().timestamp;
-        clientsProvider.clientData.docId = docId;
-        clientsProvider.clientData.interval = doc.data().interval;
-        console.log(clientsProvider.clientData.docId);
-    }*/
-
     delete(client) {
         this.clientsProvider.removeClient(client.id);
-        console.log('Client deleted!');
         this.events.publish('client:deleted', client);
-        
     };
-
-
 }
