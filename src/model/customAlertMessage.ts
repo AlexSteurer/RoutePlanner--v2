@@ -3,7 +3,6 @@ import {AlertController} from 'ionic-angular';
 export class CustomAlertMessage {
 
     constructor(private alertController: AlertController) {
-
     }
 
     quickInfoAlert(message: string) {
@@ -32,6 +31,4 @@ export class CustomAlertMessage {
             buttons: ['OK']
         }).present();
     }
-
-
 }
